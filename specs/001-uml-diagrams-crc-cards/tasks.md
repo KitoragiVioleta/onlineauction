@@ -101,7 +101,7 @@ description: "План завдань для створення UML-діагра
 `docs/state.mmd` у `mermaid.ai`, а потім звірити учасників, повідомлення, стани та переходи з
 `docs/class.mmd`, `docs/usecase.puml` і `specs/001-uml-diagrams-crc-cards/data-model.md`.
 
-- [X] T018 [P] [US3] Створити `docs/sequence.mmd` з учасниками `Seller`, `Moderator`, `Bidder`, `Auction`, `Lot`, `Bid`, `ITradingRules` та `AcquiringService`
+- [X] T018 [P] [US3] Створити `docs/sequence.mmd` з учасниками `Seller`, `Moderator`, `Bidder`, `Auction`, `Lot`, `Bid` та `AcquiringService`; виклики `canPerform` показати на `Moderator` і `Bidder`
 - [X] T019 [US3] Додати до `docs/sequence.mmd` послідовність створення лоту, подання на модерацію, схвалення та початку активних торгів
 - [X] T020 [US3] Додати до `docs/sequence.mmd` прийняття коректної ставки, відхилення ставки поза часом або нижче допустимої ціни та правило ранньої ставки при однакових сумах
 - [X] T021 [US3] Додати до `docs/sequence.mmd` завершення торгів із переможцем, фіксацію `finalPrice`, виклик симульованого `AcquiringService` і гілку завершення без ставок

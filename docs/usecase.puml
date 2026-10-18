@@ -8,6 +8,7 @@ actor "Модератор" as Moderator
 
 rectangle "Онлайн-аукціон" {
   usecase "Виставити лот\n(опис, стартова ціна)" as UC_CreateLot
+  usecase "Зняти лот" as UC_WithdrawLot
   usecase "Перевірити лот" as UC_ReviewLot
   usecase "Подати ставку\nу межах часу торгів" as UC_PlaceBid
   usecase "Визначити переможця" as UC_DetermineWinner
@@ -15,11 +16,10 @@ rectangle "Онлайн-аукціон" {
 }
 
 Seller --> UC_CreateLot
-Seller --> UC_PlaceBid : зняття лоту
+Seller --> UC_WithdrawLot
 Moderator --> UC_ReviewLot
 Bidder --> UC_PlaceBid
 Bidder --> UC_DetermineWinner : отримати результат
 
 UC_DetermineWinner ..> UC_FinalPrice : <<include>>
-UC_PlaceBid ..> UC_DetermineWinner : <<extend>>\nпісля завершення торгів
 @enduml

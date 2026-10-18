@@ -5,19 +5,20 @@ sequenceDiagram
   participant Auction
   participant Lot
   participant Bid
-  participant ITradingRules
   participant AcquiringService
 
-  Seller->>Lot: createLot(description, startingPrice)
+  Seller->>Seller: createLot(description, startingPrice)
+  Seller->>Lot: Lot(description, startingPrice)
   Seller->>Auction: submitForModeration()
   Auction-->>Moderator: status = На модерації
-  Moderator->>ITradingRules: canPerform(Lot)
+  Moderator->>Moderator: canPerform(Lot)
   alt Лот схвалено
     Moderator->>Auction: approve()
     Auction-->>Bidder: status = Активні торги
-    Bidder->>ITradingRules: canPerform(Lot)
+    Bidder->>Bidder: canPerform(Lot)
     alt Ставка в часі та відповідає minimumIncrement
       Bidder->>Auction: placeBid(bidder, amount, submittedAt)
+      Auction->>Bid: Bid(amount, submittedAt, bidder)
       Auction->>Lot: addBid(Bid)
       Lot-->>Auction: accepted
       Auction-->>Bidder: ставка прийнята
@@ -25,6 +26,7 @@ sequenceDiagram
       Auction-->>Bidder: ставка відхилена
     end
     Note over Auction,Lot: За однакової суми перемагає раніша прийнята ставка
+    Auction->>Auction: close()
     alt Є прийняті ставки після завершення часу
       Auction->>Auction: determineWinner()
       Auction->>Auction: finalPrice = highestBid.amount

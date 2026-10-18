@@ -94,7 +94,7 @@ AuctionParticipant <|-- Moderator
 Seller ..|> ITradingRules
 Bidder ..|> ITradingRules
 Moderator ..|> ITradingRules
-Auction "1" *-- "1" Lot : owns
+Auction "1" --> "1" Lot : manages
 Lot "1" *-- "0..*" Bid : contains
 Bid --> Bidder : submitted by
 Auction ..> AcquiringService : charges through
