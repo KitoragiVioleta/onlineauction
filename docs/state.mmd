@@ -1,0 +1,19 @@
+stateDiagram-v2
+  [*] --> Draft: створення лоту
+  Draft: Чернетка
+  Moderation: На модерації
+  Rejected: Відхилено
+  Active: Активні торги
+  Won: Завершено з переможцем
+  NoWinner: Завершено без переможця
+
+  Draft --> Moderation: подання на перевірку
+  Moderation --> Active: схвалення модератором
+  Moderation --> Rejected: відхилення модератором
+  Rejected --> Moderation: повторне подання продавцем
+  Rejected --> [*]: зняття лоту продавцем
+  Active --> Active: прийняти ставку [лише в Активні торги]
+  Active --> Won: завершення часу [є прийняті ставки] / determineWinner()
+  Active --> NoWinner: завершення часу [ставок немає]
+  Won --> [*]: фінальний результат
+  NoWinner --> [*]: фінальний результат

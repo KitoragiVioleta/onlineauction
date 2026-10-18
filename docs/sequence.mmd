@@ -1,0 +1,41 @@
+sequenceDiagram
+  actor Seller
+  actor Moderator
+  actor Bidder
+  participant Auction
+  participant Lot
+  participant Bid
+  participant ITradingRules
+  participant AcquiringService
+
+  Seller->>Lot: createLot(description, startingPrice)
+  Seller->>Auction: submitForModeration()
+  Auction-->>Moderator: status = На модерації
+  Moderator->>ITradingRules: canPerform(Lot)
+  alt Лот схвалено
+    Moderator->>Auction: approve()
+    Auction-->>Bidder: status = Активні торги
+    Bidder->>ITradingRules: canPerform(Lot)
+    alt Ставка в часі та відповідає minimumIncrement
+      Bidder->>Auction: placeBid(bidder, amount, submittedAt)
+      Auction->>Lot: addBid(Bid)
+      Lot-->>Auction: accepted
+      Auction-->>Bidder: ставка прийнята
+    else Ставка поза часом або замала
+      Auction-->>Bidder: ставка відхилена
+    end
+    Note over Auction,Lot: За однакової суми перемагає раніша прийнята ставка
+    alt Є прийняті ставки після завершення часу
+      Auction->>Auction: determineWinner()
+      Auction->>Auction: finalPrice = highestBid.amount
+      Auction->>AcquiringService: charge(winner, finalPrice)
+      AcquiringService-->>Auction: simulated charge
+      Auction-->>Bidder: Завершено з переможцем
+    else Немає ставок
+      Auction->>Auction: determineWinner() = null
+      Auction-->>Seller: Завершено без переможця
+    end
+  else Лот відхилено
+    Moderator->>Auction: reject()
+    Auction-->>Seller: status = Відхилено
+  end

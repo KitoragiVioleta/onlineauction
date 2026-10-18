@@ -1,0 +1,100 @@
+classDiagram
+class AuctionParticipant {
+  <<abstract>>
+  -String participantId
+  -String displayName
+  +AuctionParticipant(String participantId, String displayName)
+  +abstract String getRole()
+  +final String getDisplayName()
+}
+
+class Seller {
+  -List~Lot~ lots
+  +Seller(String participantId, String displayName)
+  +override String getRole()
+  +override boolean canPerform(Lot lot)
+  +Lot createLot(String description, double startingPrice)
+  +void submitForModeration(Auction auction)
+  +void withdraw(Auction auction)
+}
+
+class Bidder {
+  -List~Bid~ submittedBids
+  +Bidder(String participantId, String displayName)
+  +override String getRole()
+  +override boolean canPerform(Lot lot)
+  +List~Bid~ getSubmittedBids()
+}
+
+class Moderator {
+  -List~Lot~ reviewedLots
+  +Moderator(String participantId, String displayName)
+  +override String getRole()
+  +override boolean canPerform(Lot lot)
+  +void approve(Auction auction)
+  +void reject(Auction auction)
+}
+
+class ITradingRules {
+  <<interface>>
+  +boolean canPerform(Lot lot)
+}
+
+class Auction {
+  -String auctionId
+  -String status
+  -LocalDateTime startTime
+  -LocalDateTime endTime
+  -double minimumIncrement
+  -Lot lot
+  -double finalPrice
+  -Bidder winner
+  -AcquiringService acquiringService
+  +Auction(String auctionId, Lot lot, LocalDateTime startTime, LocalDateTime endTime, double minimumIncrement, AcquiringService acquiringService)
+  +void submitForModeration()
+  +void approve()
+  +void reject()
+  +void withdraw()
+  +boolean placeBid(Bidder bidder, double amount)
+  +boolean placeBid(Bidder bidder, double amount, LocalDateTime submittedAt)
+  +void close()
+  +Bidder determineWinner()
+}
+
+class Lot {
+  -String lotId
+  -String description
+  -double startingPrice
+  -List~Bid~ bids
+  +Lot(String lotId, String description, double startingPrice)
+  +void addBid(Bid bid)
+  +Bid getHighestBid()
+  +List~Bid~ getBids()
+}
+
+class Bid {
+  -double amount
+  -LocalDateTime submittedAt
+  -Bidder bidder
+  +Bid(double amount, LocalDateTime submittedAt, Bidder bidder)
+  +double getAmount()
+  +LocalDateTime getSubmittedAt()
+  +Bidder getBidder()
+}
+
+class AcquiringService {
+  -String merchantId
+  +AcquiringService(String merchantId)
+  +void charge(Bidder bidder, double amount)
+}
+
+AuctionParticipant <|-- Seller
+AuctionParticipant <|-- Bidder
+AuctionParticipant <|-- Moderator
+Seller ..|> ITradingRules
+Bidder ..|> ITradingRules
+Moderator ..|> ITradingRules
+Auction "1" *-- "1" Lot : owns
+Lot "1" *-- "0..*" Bid : contains
+Bid --> Bidder : submitted by
+Auction ..> AcquiringService : charges through

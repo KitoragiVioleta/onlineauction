@@ -1,0 +1,25 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Продавець" as Seller
+actor "Учасник торгів" as Bidder
+actor "Модератор" as Moderator
+
+rectangle "Онлайн-аукціон" {
+  usecase "Виставити лот\n(опис, стартова ціна)" as UC_CreateLot
+  usecase "Перевірити лот" as UC_ReviewLot
+  usecase "Подати ставку\nу межах часу торгів" as UC_PlaceBid
+  usecase "Визначити переможця" as UC_DetermineWinner
+  usecase "Зафіксувати підсумкову ціну" as UC_FinalPrice
+}
+
+Seller --> UC_CreateLot
+Seller --> UC_PlaceBid : зняття лоту
+Moderator --> UC_ReviewLot
+Bidder --> UC_PlaceBid
+Bidder --> UC_DetermineWinner : отримати результат
+
+UC_DetermineWinner ..> UC_FinalPrice : <<include>>
+UC_PlaceBid ..> UC_DetermineWinner : <<extend>>\nпісля завершення торгів
+@enduml
