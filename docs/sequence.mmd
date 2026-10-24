@@ -8,9 +8,8 @@ sequenceDiagram
   participant IAcquiringService
 
   Seller->>Seller: createLot(description, startingPrice)
-  create participant Auction
-  Note over Auction: Auction створюється системою з IAcquiringService через конструктор (DI)
   Seller->>Lot: Lot(lotId, description, startingPrice)
+  Note over Auction: Auction(auctionId, lot, startTime, endTime, minimumIncrement, acquiringService) створює система, IAcquiringService передається через конструктор (DI)
   Seller->>Auction: submitForModeration()
   Note over Auction: статус = На модерації
   Moderator->>Moderator: canPerform(Lot)
@@ -43,7 +42,7 @@ sequenceDiagram
     else Немає ставок
       Auction->>Auction: determineWinner() = null
       Note over Auction: статус = Завершено без переможця
-      Auction-->>Seller: результат без переможця
+      Auction-)Seller: результат без переможця
     end
   else Лот відхилено
     Moderator->>Auction: reject()
