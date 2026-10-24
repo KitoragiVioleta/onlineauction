@@ -15,7 +15,7 @@ stateDiagram-v2
   DRAFT --> WITHDRAWN: зняття продавцем
   ON_MODERATION --> WITHDRAWN: зняття продавцем
   REJECTED --> WITHDRAWN: зняття продавцем
-  ACTIVE --> ACTIVE: ставка в межах часу і ≥ поточна ціна + minimumIncrement
+  ACTIVE --> ACTIVE: прийняти ставку [в межах часу і ≥ поточна ціна + minimumIncrement]
   ACTIVE --> FINISHED_WITH_WINNER: завершення часу [є прийняті ставки]
   ACTIVE --> FINISHED_WITHOUT_WINNER: завершення часу [ставок немає]
   WITHDRAWN --> [*]: завершення знятого лоту

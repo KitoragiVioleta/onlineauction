@@ -2,19 +2,20 @@ sequenceDiagram
   actor Seller
   actor Moderator
   actor Bidder
-  participant System
   participant Auction
   participant Lot
   participant Bid
   participant IAcquiringService
 
+  Seller->>Seller: createLot(description, startingPrice)
+  create participant Auction
+  Note over Auction: Auction створюється системою з IAcquiringService через конструктор (DI)
   Seller->>Lot: Lot(lotId, description, startingPrice)
-  Seller->>System: create participant Auction
-  Note over System,Auction: Auction отримує IAcquiringService через конструктор (DI)
   Seller->>Auction: submitForModeration()
   Note over Auction: статус = На модерації
-  Moderator->>Auction: approve()
+  Moderator->>Moderator: canPerform(Lot)
   alt Лот схвалено
+    Moderator->>Auction: approve()
     Note over Auction: статус = Активні торги
     Bidder->>Bidder: canPerform(Lot)
     alt Ставка в часі та відповідає minimumIncrement
@@ -27,8 +28,8 @@ sequenceDiagram
       Auction-->>Bidder: ставка відхилена
     end
     Note over Auction,Lot: За однакової суми перемагає раніша прийнята ставка
-    Note over Auction: після завершення часу торгів
-    System->>Auction: close()
+    Note over Auction: після завершення часу торгів (ініціює система)
+    Auction->>Auction: close()
     alt Є прийняті ставки після завершення часу
       Auction->>Lot: getHighestBid()
       Lot-->>Auction: highestBid
@@ -37,8 +38,8 @@ sequenceDiagram
       Auction->>IAcquiringService: charge(winner, finalPrice)
       IAcquiringService-->>Auction: simulated charge
       Note over Auction: статус = Завершено з переможцем
-      Auction-->>Seller: результат торгів
-      Auction-->>Bidder: перемога і підсумкова ціна
+      Auction-)Seller: результат торгів
+      Auction-)Bidder: перемога і підсумкова ціна
     else Немає ставок
       Auction->>Auction: determineWinner() = null
       Note over Auction: статус = Завершено без переможця
@@ -47,5 +48,5 @@ sequenceDiagram
   else Лот відхилено
     Moderator->>Auction: reject()
     Note over Auction: статус = Відхилено
-    Auction-->>Seller: причина відхилення
+    Auction-)Seller: причина відхилення
   end

@@ -46,6 +46,7 @@ class IAcquiringService {
 }
 
 class AuctionStatus {
+  <<enumeration>>
   -String label
   +AuctionStatus(String label)
   +String getLabel()
@@ -116,8 +117,8 @@ AcquiringService ..|> IAcquiringService
 Auction "1" --> "1" Lot : manages
 Lot "1" *-- "0..*" Bid : contains
 Bidder "1" -- "0..*" Bid : submits
-Auction "0..1" --> Bidder : winner
+Auction --> "0..1" Bidder : winner
 Seller "1" --> "0..*" Lot : creates
 Moderator "1" --> "0..*" Auction : reviews
 Auction ..> IAcquiringService : charges through
-AuctionStatus --> Auction : describes
+Auction --> AuctionStatus : status
