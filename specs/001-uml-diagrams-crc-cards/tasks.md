@@ -29,8 +29,8 @@ Google Таблицях. PlantUML, Java, Node.js і Mermaid CLI не встан�
 артефактів без встановлення PlantUML, Java, Node.js або Mermaid CLI.
 
 - [x] T001 [P] Створити каталог `docs/` і визначити файли `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` та `docs/crc.xlsx`
-- [ ] T002 [P] [Перевірено вручну] Перевірити `docs/usecase.puml` у `plantuml.com` без встановлення PlantUML або Java та зафіксувати процедуру в `specs/001-uml-diagrams-crc-cards/quickstart.md`
-- [ ] T003 [P] [Перевірено вручну] Перевірити `docs/class.mmd`, `docs/sequence.mmd` і `docs/state.mmd` у `mermaid.ai`, а `docs/crc.xlsx` у Google Таблицях без встановлення Node.js або Mermaid CLI та зафіксувати процедуру в `specs/001-uml-diagrams-crc-cards/quickstart.md`
+- [x] T002 [P] [Перевірено вручну] Перевірити `docs/usecase.puml` у `plantuml.com` без встановлення PlantUML або Java та зафіксувати процедуру в `specs/001-uml-diagrams-crc-cards/quickstart.md`
+- [x] T003 [P] [Перевірено вручну] Перевірити `docs/class.mmd`, `docs/sequence.mmd` і `docs/state.mmd` у `mermaid.ai`, а `docs/crc.xlsx` у Google Таблицях без встановлення Node.js або Mermaid CLI та зафіксувати процедуру в `specs/001-uml-diagrams-crc-cards/quickstart.md`
 
 ---
 
@@ -68,7 +68,7 @@ Google Таблицях. PlantUML, Java, Node.js і Mermaid CLI не встан�
 - [x] T010 [US1] Додати сценарій перевірки лоту модератором у `docs/usecase.puml`
 - [x] T011 [US1] Додати сценарій подання ставки учасником торгів лише в межах часу торгів у `docs/usecase.puml`
 - [x] T012 [US1] Додати системний сценарій визначення переможця та фіксації підсумкової ціни після завершення торгів у `docs/usecase.puml`
-- [ ] T013 [Перевірено вручну] [US1] Перевірити синтаксис, кількість акторів, сценарії та зв’язки `docs/usecase.puml` у `plantuml.com` за вимогами `specs/001-uml-diagrams-crc-cards/spec.md`
+- [x] T013 [Перевірено вручну] [US1] Перевірити синтаксис, кількість акторів, сценарії та зв’язки `docs/usecase.puml` у `plantuml.com` за вимогами `specs/001-uml-diagrams-crc-cards/spec.md`
 
 **Контрольна точка**: `docs/usecase.puml` самостійно підтверджує роль кожного
 актора та основні бізнес-операції.
@@ -90,7 +90,7 @@ Google Таблицях. PlantUML, Java, Node.js і Mermaid CLI не встан�
 - [x] T017 [P] [US2] Описати `Auction`, `Lot`, `Bid` і `AcquiringService` з конструкторами, атрибутами, методами та типами грошових значень у `docs/class.mmd`
 - [x] T018 [US2] Додати до `docs/class.mmd` наслідування, реалізацію інтерфейсів, залежність `Auction ..> IAcquiringService`, композицію `Lot`—`Bid` і всі задані асоціації з кратностями
 - [x] T019 [US2] Додати до `docs/class.mmd` `final`-метод, перевизначені `override`-методи та перевантажені методи `placeBid(...)` відповідно до `specs/001-uml-diagrams-crc-cards/data-model.md`
-- [ ] T020 [Перевірено вручну] [US2] Перевірити рендеринг і структурну повноту `docs/class.mmd` у `mermaid.ai` та звірити 11 сутностей із `specs/001-uml-diagrams-crc-cards/spec.md`
+- [x] T020 [Перевірено вручну] [US2] Перевірити рендеринг і структурну повноту `docs/class.mmd` у `mermaid.ai` та звірити 11 сутностей із `specs/001-uml-diagrams-crc-cards/spec.md`
 
 **Контрольна точка**: `docs/class.mmd` є повним словником структури для
 динамічних діаграм і CRC-карток.
@@ -113,7 +113,7 @@ Google Таблицях. PlantUML, Java, Node.js і Mermaid CLI не встан�
 - [x] T025 [P] [US3] Створити в `docs/state.mmd` початковий і кінцевий псевдостани та стани `Чернетка`, `На модерації`, `Відхилено`, `Активні торги`, `Завершено з переможцем`, `Завершено без переможця` і `Знято`
 - [x] T026 [US3] Додати до `docs/state.mmd` усі переходи створення, подання, схвалення, відхилення, повторного подання, зняття та завершення торгів із підписаними подіями
 - [x] T027 [US3] Додати до `docs/state.mmd` петлю `ACTIVE --> ACTIVE` для допустимої ставки та переходи всіх трьох завершальних станів до кінцевого псевдостану
-- [ ] T028 [Перевірено вручну] [US3] Перевірити рендеринг і семантичну узгодженість `docs/sequence.mmd` та `docs/state.mmd` у `mermaid.ai`
+- [x] T028 [Перевірено вручну] [US3] Перевірити рендеринг і семантичну узгодженість `docs/sequence.mmd` та `docs/state.mmd` у `mermaid.ai`
 
 **Контрольна точка**: динамічні діаграми описують успішний шлях, відхилені
 ставки, відсутність ставок, системне визначення переможця та всі стани.
@@ -149,7 +149,7 @@ Google Таблицях. PlantUML, Java, Node.js і Mermaid CLI не встан�
 - [x] T034 [P] Перевірити існування та відкриття `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` і `docs/crc.xlsx`
 - [x] T035 [P] Звірити англійські ідентифікатори та українські підписи в `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` і `docs/crc.xlsx`
 - [x] T036 [P] Перевірити відсутність мережевих, базових і реальних платіжних інтеграцій у файлах `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` і `docs/crc.xlsx`
-- [ ] T037 [Перевірено вручну] Виконати сценарії з `specs/001-uml-diagrams-crc-cards/quickstart.md`: вручну перевірити UML у `plantuml.com` і `mermaid.ai`, відкрити `docs/crc.xlsx` у Google Таблицях та виконати структурну перевірку через локальний `openpyxl`
+- [x] T037 [Перевірено вручну] Виконати сценарії з `specs/001-uml-diagrams-crc-cards/quickstart.md`: вручну перевірити UML у `plantuml.com` і `mermaid.ai`, відкрити `docs/crc.xlsx` у Google Таблицях та виконати структурну перевірку через локальний `openpyxl`
 - [x] T038 Усунути виявлені розбіжності між акторами, 11 сутностями, повідомленнями, станами, переходами та CRC-картками у `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` і `docs/crc.xlsx`
 
 ---
@@ -244,4 +244,4 @@ US4 передається виконавцю після стабілізаці�
 ## Phase 8: Convergence
 
 - [x] T039 Додати до `docs/usecase.puml` явний системний тригер ініціації визначення переможця після завершення часу торгів без введення додаткового актора per FR-026 (partial)
-- [ ] T040 Виконати та зафіксувати в `specs/001-uml-diagrams-crc-cards/quickstart.md` ручну перевірку PlantUML у `plantuml.com`, Mermaid у `mermaid.ai`, відкриття `docs/crc.xlsx` у Google Таблицях і структурну перевірку через `openpyxl` per SC-001 (missing)
+- [x] T040 Виконати та зафіксувати в `specs/001-uml-diagrams-crc-cards/quickstart.md` ручну перевірку PlantUML у `plantuml.com`, Mermaid у `mermaid.ai`, відкриття `docs/crc.xlsx` у Google Таблицях і структурну перевірку через `openpyxl` per SC-001 (missing)
