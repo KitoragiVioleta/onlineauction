@@ -1,19 +1,23 @@
 stateDiagram-v2
-  [*] --> Draft: створення лоту
-  Draft: Чернетка
-  Moderation: На модерації
-  Rejected: Відхилено
-  Active: Активні торги
-  Won: Завершено з переможцем
-  NoWinner: Завершено без переможця
+  [*] --> DRAFT: створення лоту
+  state "Чернетка" as DRAFT
+  state "На модерації" as ON_MODERATION
+  state "Відхилено" as REJECTED
+  state "Активні торги" as ACTIVE
+  state "Завершено з переможцем" as FINISHED_WITH_WINNER
+  state "Завершено без переможця" as FINISHED_WITHOUT_WINNER
+  state "Знято" as WITHDRAWN
 
-  Draft --> Moderation: подання на перевірку
-  Moderation --> Active: схвалення модератором
-  Moderation --> Rejected: відхилення модератором
-  Rejected --> Moderation: повторне подання продавцем
-  Rejected --> [*]: зняття лоту продавцем
-  Active --> Active: прийняти ставку [лише в Активні торги]
-  Active --> Won: завершення часу [є прийняті ставки] / determineWinner()
-  Active --> NoWinner: завершення часу [ставок немає]
-  Won --> [*]: фінальний результат
-  NoWinner --> [*]: фінальний результат
+  DRAFT --> ON_MODERATION: подання на перевірку
+  ON_MODERATION --> ACTIVE: схвалення модератором
+  ON_MODERATION --> REJECTED: відхилення модератором
+  REJECTED --> ON_MODERATION: повторне подання продавцем
+  DRAFT --> WITHDRAWN: зняття продавцем
+  ON_MODERATION --> WITHDRAWN: зняття продавцем
+  REJECTED --> WITHDRAWN: зняття продавцем
+  ACTIVE --> ACTIVE: ставка в межах часу і ≥ поточна ціна + minimumIncrement
+  ACTIVE --> FINISHED_WITH_WINNER: завершення часу [є прийняті ставки]
+  ACTIVE --> FINISHED_WITHOUT_WINNER: завершення часу [ставок немає]
+  WITHDRAWN --> [*]: завершення знятого лоту
+  FINISHED_WITH_WINNER --> [*]: фінальний результат
+  FINISHED_WITHOUT_WINNER --> [*]: фінальний результат

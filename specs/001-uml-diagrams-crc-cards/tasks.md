@@ -28,7 +28,7 @@ Google Таблицях. PlantUML, Java, Node.js і Mermaid CLI не встан�
 **Мета**: підготувати цільові файли та спосіб ручної перевірки документаційних
 артефактів без встановлення PlantUML, Java, Node.js або Mermaid CLI.
 
-- [ ] T001 [P] Створити каталог `docs/` і визначити файли `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` та `docs/crc.xlsx`
+- [x] T001 [P] Створити каталог `docs/` і визначити файли `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` та `docs/crc.xlsx`
 - [ ] T002 [P] [Перевірено вручну] Перевірити `docs/usecase.puml` у `plantuml.com` без встановлення PlantUML або Java та зафіксувати процедуру в `specs/001-uml-diagrams-crc-cards/quickstart.md`
 - [ ] T003 [P] [Перевірено вручну] Перевірити `docs/class.mmd`, `docs/sequence.mmd` і `docs/state.mmd` у `mermaid.ai`, а `docs/crc.xlsx` у Google Таблицях без встановлення Node.js або Mermaid CLI та зафіксувати процедуру в `specs/001-uml-diagrams-crc-cards/quickstart.md`
 
@@ -42,10 +42,10 @@ Google Таблицях. PlantUML, Java, Node.js і Mermaid CLI не встан�
 **Критично**: усі наступні історії залежать від цієї фази та використовують
 однакові англійські ідентифікатори, українські підписи й правила моделі.
 
-- [ ] T004 [P] Зафіксувати одинадцять сутностей `AuctionParticipant`, `Seller`, `Bidder`, `Moderator`, `ITradingRules`, `IAcquiringService`, `AuctionStatus`, `Auction`, `Lot`, `Bid` і `AcquiringService` у `specs/001-uml-diagrams-crc-cards/data-model.md`
-- [ ] T005 [P] Зафіксувати сім значень `AuctionStatus`, переходи життєвого циклу та дозволені переходи продавця в `specs/001-uml-diagrams-crc-cards/data-model.md`
-- [ ] T006 [P] Зафіксувати типи `BigDecimal`, композицію `Lot`—`Bid`, правило створення ставки через `Lot.addBid(...)` і залежність `Auction` від `IAcquiringService` у `specs/001-uml-diagrams-crc-cards/data-model.md`
-- [ ] T007 Узгодити англійські ідентифікатори, українські підписи, відповідальності та співпрацівників для всіх артефактів у `specs/001-uml-diagrams-crc-cards/research.md`
+- [x] T004 [P] Зафіксувати одинадцять сутностей `AuctionParticipant`, `Seller`, `Bidder`, `Moderator`, `ITradingRules`, `IAcquiringService`, `AuctionStatus`, `Auction`, `Lot`, `Bid` і `AcquiringService` у `specs/001-uml-diagrams-crc-cards/data-model.md`
+- [x] T005 [P] Зафіксувати сім значень `AuctionStatus`, переходи життєвого циклу та дозволені переходи продавця в `specs/001-uml-diagrams-crc-cards/data-model.md`
+- [x] T006 [P] Зафіксувати типи `BigDecimal`, композицію `Lot`—`Bid`, правило створення ставки через `Lot.addBid(...)` і залежність `Auction` від `IAcquiringService` у `specs/001-uml-diagrams-crc-cards/data-model.md`
+- [x] T007 Узгодити англійські ідентифікатори, українські підписи, відповідальності та співпрацівників для всіх артефактів у `specs/001-uml-diagrams-crc-cards/research.md`
 
 **Контрольна точка**: спільна модель готова; артефакти історій користувачів
 можна створювати незалежними потоками після завершення цієї фази.
@@ -63,11 +63,11 @@ Google Таблицях. PlantUML, Java, Node.js і Mermaid CLI не встан�
 `Учасник торгів` і `Модератор`, щонайменше чотири сценарії та зв’язок кожного
 актора з відповідною операцією.
 
-- [ ] T008 [US1] Створити межі системи та рівно трьох акторів у `docs/usecase.puml`
-- [ ] T009 [US1] Додати сценарій виставлення лоту продавцем із описом і стартовою ціною у `docs/usecase.puml`
-- [ ] T010 [US1] Додати сценарій перевірки лоту модератором у `docs/usecase.puml`
-- [ ] T011 [US1] Додати сценарій подання ставки учасником торгів лише в межах часу торгів у `docs/usecase.puml`
-- [ ] T012 [US1] Додати системний сценарій визначення переможця та фіксації підсумкової ціни після завершення торгів у `docs/usecase.puml`
+- [x] T008 [US1] Створити межі системи та рівно трьох акторів у `docs/usecase.puml`
+- [x] T009 [US1] Додати сценарій виставлення лоту продавцем із описом і стартовою ціною у `docs/usecase.puml`
+- [x] T010 [US1] Додати сценарій перевірки лоту модератором у `docs/usecase.puml`
+- [x] T011 [US1] Додати сценарій подання ставки учасником торгів лише в межах часу торгів у `docs/usecase.puml`
+- [x] T012 [US1] Додати системний сценарій визначення переможця та фіксації підсумкової ціни після завершення торгів у `docs/usecase.puml`
 - [ ] T013 [Перевірено вручну] [US1] Перевірити синтаксис, кількість акторів, сценарії та зв’язки `docs/usecase.puml` у `plantuml.com` за вимогами `specs/001-uml-diagrams-crc-cards/spec.md`
 
 **Контрольна точка**: `docs/usecase.puml` самостійно підтверджує роль кожного
@@ -84,12 +84,12 @@ Google Таблицях. PlantUML, Java, Node.js і Mermaid CLI не встан�
 підтвердити наявність усіх 11 сутностей, конструкторів, атрибутів, методів,
 типів зв’язків, `final`, `override`, overload і `BigDecimal`.
 
-- [ ] T014 [P] [US2] Описати абстрактний `AuctionParticipant` і класи `Seller`, `Bidder`, `Moderator` з конструкторами, атрибутами та методами у `docs/class.mmd`
-- [ ] T015 [P] [US2] Описати інтерфейси `ITradingRules` і `IAcquiringService` з контрактами `canPerform(...)` та `charge(Bidder bidder, BigDecimal amount): void` у `docs/class.mmd`
-- [ ] T016 [P] [US2] Описати `AuctionStatus` як тип із `label`, конструктором, `getLabel()` і сімома значеннями у `docs/class.mmd`
-- [ ] T017 [P] [US2] Описати `Auction`, `Lot`, `Bid` і `AcquiringService` з конструкторами, атрибутами, методами та типами грошових значень у `docs/class.mmd`
-- [ ] T018 [US2] Додати до `docs/class.mmd` наслідування, реалізацію інтерфейсів, залежність `Auction ..> IAcquiringService`, композицію `Lot`—`Bid` і всі задані асоціації з кратностями
-- [ ] T019 [US2] Додати до `docs/class.mmd` `final`-метод, перевизначені `override`-методи та перевантажені методи `placeBid(...)` відповідно до `specs/001-uml-diagrams-crc-cards/data-model.md`
+- [x] T014 [P] [US2] Описати абстрактний `AuctionParticipant` і класи `Seller`, `Bidder`, `Moderator` з конструкторами, атрибутами та методами у `docs/class.mmd`
+- [x] T015 [P] [US2] Описати інтерфейси `ITradingRules` і `IAcquiringService` з контрактами `canPerform(...)` та `charge(Bidder bidder, BigDecimal amount): void` у `docs/class.mmd`
+- [x] T016 [P] [US2] Описати `AuctionStatus` як тип із `label`, конструктором, `getLabel()` і сімома значеннями у `docs/class.mmd`
+- [x] T017 [P] [US2] Описати `Auction`, `Lot`, `Bid` і `AcquiringService` з конструкторами, атрибутами, методами та типами грошових значень у `docs/class.mmd`
+- [x] T018 [US2] Додати до `docs/class.mmd` наслідування, реалізацію інтерфейсів, залежність `Auction ..> IAcquiringService`, композицію `Lot`—`Bid` і всі задані асоціації з кратностями
+- [x] T019 [US2] Додати до `docs/class.mmd` `final`-метод, перевизначені `override`-методи та перевантажені методи `placeBid(...)` відповідно до `specs/001-uml-diagrams-crc-cards/data-model.md`
 - [ ] T020 [Перевірено вручну] [US2] Перевірити рендеринг і структурну повноту `docs/class.mmd` у `mermaid.ai` та звірити 11 сутностей із `specs/001-uml-diagrams-crc-cards/spec.md`
 
 **Контрольна точка**: `docs/class.mmd` є повним словником структури для
@@ -106,13 +106,13 @@ Google Таблицях. PlantUML, Java, Node.js і Mermaid CLI не встан�
 у `mermaid.ai` та звірити об’єкти, повідомлення, стани й переходи з
 `docs/class.mmd`, `docs/usecase.puml` і `specs/001-uml-diagrams-crc-cards/data-model.md`.
 
-- [ ] T021 [P] [US3] Створити учасників і повідомлення створення лоту, подання на модерацію, перевірки та схвалення в `docs/sequence.mmd`
-- [ ] T022 [US3] Додати до `docs/sequence.mmd` прийняття ставки через `Auction.placeBid(...)` і створення `Bid` саме через `Lot.addBid(...)`
-- [ ] T023 [US3] Додати до `docs/sequence.mmd` відхилення ставки поза часовим інтервалом або нижче допустимої ціни та правило ранньої ставки при однакових сумах
-- [ ] T024 [US3] Додати до `docs/sequence.mmd` завершення торгів, виклик `getHighestBid()`, фіксацію `finalPrice`, системне визначення переможця, симульований `IAcquiringService` і повідомлення продавцю та учаснику торгів
-- [ ] T025 [P] [US3] Створити в `docs/state.mmd` початковий і кінцевий псевдостани та стани `Чернетка`, `На модерації`, `Відхилено`, `Активні торги`, `Завершено з переможцем`, `Завершено без переможця` і `Знято`
-- [ ] T026 [US3] Додати до `docs/state.mmd` усі переходи створення, подання, схвалення, відхилення, повторного подання, зняття та завершення торгів із підписаними подіями
-- [ ] T027 [US3] Додати до `docs/state.mmd` петлю `ACTIVE --> ACTIVE` для допустимої ставки та переходи всіх трьох завершальних станів до кінцевого псевдостану
+- [x] T021 [P] [US3] Створити учасників і повідомлення створення лоту, подання на модерацію, перевірки та схвалення в `docs/sequence.mmd`
+- [x] T022 [US3] Додати до `docs/sequence.mmd` прийняття ставки через `Auction.placeBid(...)` і створення `Bid` саме через `Lot.addBid(...)`
+- [x] T023 [US3] Додати до `docs/sequence.mmd` відхилення ставки поза часовим інтервалом або нижче допустимої ціни та правило ранньої ставки при однакових сумах
+- [x] T024 [US3] Додати до `docs/sequence.mmd` завершення торгів, виклик `getHighestBid()`, фіксацію `finalPrice`, системне визначення переможця, симульований `IAcquiringService` і повідомлення продавцю та учаснику торгів
+- [x] T025 [P] [US3] Створити в `docs/state.mmd` початковий і кінцевий псевдостани та стани `Чернетка`, `На модерації`, `Відхилено`, `Активні торги`, `Завершено з переможцем`, `Завершено без переможця` і `Знято`
+- [x] T026 [US3] Додати до `docs/state.mmd` усі переходи створення, подання, схвалення, відхилення, повторного подання, зняття та завершення торгів із підписаними подіями
+- [x] T027 [US3] Додати до `docs/state.mmd` петлю `ACTIVE --> ACTIVE` для допустимої ставки та переходи всіх трьох завершальних станів до кінцевого псевдостану
 - [ ] T028 [Перевірено вручну] [US3] Перевірити рендеринг і семантичну узгодженість `docs/sequence.mmd` та `docs/state.mmd` у `mermaid.ai`
 
 **Контрольна точка**: динамічні діаграми описують успішний шлях, відхилені
@@ -130,11 +130,11 @@ Google Таблицях. PlantUML, Java, Node.js і Mermaid CLI не встан�
 щонайменше одну відповідальність і одного співпрацівника або обґрунтовану
 позначку відсутності співпрацівників.
 
-- [ ] T029 [P] [US4] Підготувати CRC-дані для `AuctionParticipant`, `Seller`, `Bidder`, `Moderator`, `ITradingRules` і `IAcquiringService` у `docs/crc.xlsx`
-- [ ] T030 [P] [US4] Підготувати CRC-дані для `AuctionStatus`, `Auction`, `Lot`, `Bid` і `AcquiringService` у `docs/crc.xlsx`
-- [ ] T031 [US4] Створити `docs/crc.xlsx` локальним Python із `openpyxl` з окремим worksheet для кожної з 11 сутностей
-- [ ] T032 [US4] Додати до кожного worksheet у `docs/crc.xlsx` український заголовок класу, колонки `обов’язки класу` і `з ким співпрацює`, відповідальності та співпрацівників згідно з `specs/001-uml-diagrams-crc-cards/data-model.md`
-- [ ] T033 [US4] Перевірити структуру та зміст `docs/crc.xlsx` через `openpyxl` і звірити перелік карток із `docs/class.mmd`
+- [x] T029 [P] [US4] Підготувати CRC-дані для `AuctionParticipant`, `Seller`, `Bidder`, `Moderator`, `ITradingRules` і `IAcquiringService` у `docs/crc.xlsx`
+- [x] T030 [P] [US4] Підготувати CRC-дані для `AuctionStatus`, `Auction`, `Lot`, `Bid` і `AcquiringService` у `docs/crc.xlsx`
+- [x] T031 [US4] Створити `docs/crc.xlsx` локальним Python із `openpyxl` з окремим worksheet для кожної з 11 сутностей
+- [x] T032 [US4] Додати до кожного worksheet у `docs/crc.xlsx` український заголовок класу, колонки `обов’язки класу` і `з ким співпрацює`, відповідальності та співпрацівників згідно з `specs/001-uml-diagrams-crc-cards/data-model.md`
+- [x] T033 [US4] Перевірити структуру та зміст `docs/crc.xlsx` через `openpyxl` і звірити перелік карток із `docs/class.mmd`
 
 **Контрольна точка**: `docs/crc.xlsx` відкривається без відновлення, покриває
 всі 11 сутностей і не додає класів поза затвердженим словником.
@@ -146,11 +146,11 @@ Google Таблицях. PlantUML, Java, Node.js і Mermaid CLI не встан�
 **Мета**: підтвердити повноту, узгодженість, мовні правила та відтворюваність
 усіх п’яти артефактів без встановлення PlantUML, Java, Node.js або Mermaid CLI.
 
-- [ ] T034 [P] Перевірити існування та відкриття `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` і `docs/crc.xlsx`
-- [ ] T035 [P] Звірити англійські ідентифікатори та українські підписи в `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` і `docs/crc.xlsx`
-- [ ] T036 [P] Перевірити відсутність мережевих, базових і реальних платіжних інтеграцій у файлах `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` і `docs/crc.xlsx`
+- [x] T034 [P] Перевірити існування та відкриття `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` і `docs/crc.xlsx`
+- [x] T035 [P] Звірити англійські ідентифікатори та українські підписи в `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` і `docs/crc.xlsx`
+- [x] T036 [P] Перевірити відсутність мережевих, базових і реальних платіжних інтеграцій у файлах `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` і `docs/crc.xlsx`
 - [ ] T037 [Перевірено вручну] Виконати сценарії з `specs/001-uml-diagrams-crc-cards/quickstart.md`: вручну перевірити UML у `plantuml.com` і `mermaid.ai`, відкрити `docs/crc.xlsx` у Google Таблицях та виконати структурну перевірку через локальний `openpyxl`
-- [ ] T038 Усунути виявлені розбіжності між акторами, 11 сутностями, повідомленнями, станами, переходами та CRC-картками у `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` і `docs/crc.xlsx`
+- [x] T038 Усунути виявлені розбіжності між акторами, 11 сутностями, повідомленнями, станами, переходами та CRC-картками у `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` і `docs/crc.xlsx`
 
 ---
 

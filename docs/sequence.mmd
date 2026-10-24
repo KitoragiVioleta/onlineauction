@@ -2,42 +2,50 @@ sequenceDiagram
   actor Seller
   actor Moderator
   actor Bidder
+  participant System
   participant Auction
   participant Lot
   participant Bid
-  participant AcquiringService
+  participant IAcquiringService
 
-  Seller->>Seller: createLot(description, startingPrice)
-  Seller->>Lot: Lot(description, startingPrice)
+  Seller->>Lot: Lot(lotId, description, startingPrice)
+  Seller->>System: create participant Auction
+  Note over System,Auction: Auction отримує IAcquiringService через конструктор (DI)
   Seller->>Auction: submitForModeration()
-  Auction-->>Moderator: status = На модерації
-  Moderator->>Moderator: canPerform(Lot)
+  Note over Auction: статус = На модерації
+  Moderator->>Auction: approve()
   alt Лот схвалено
-    Moderator->>Auction: approve()
-    Auction-->>Bidder: status = Активні торги
+    Note over Auction: статус = Активні торги
     Bidder->>Bidder: canPerform(Lot)
     alt Ставка в часі та відповідає minimumIncrement
       Bidder->>Auction: placeBid(bidder, amount, submittedAt)
-      Auction->>Bid: Bid(amount, submittedAt, bidder)
-      Auction->>Lot: addBid(Bid)
-      Lot-->>Auction: accepted
+      Auction->>Lot: addBid(amount, submittedAt, bidder)
+      Lot->>Bid: Bid(amount, submittedAt, bidder)
+      Lot-->>Auction: accepted Bid
       Auction-->>Bidder: ставка прийнята
     else Ставка поза часом або замала
       Auction-->>Bidder: ставка відхилена
     end
     Note over Auction,Lot: За однакової суми перемагає раніша прийнята ставка
-    Auction->>Auction: close()
+    Note over Auction: після завершення часу торгів
+    System->>Auction: close()
     alt Є прийняті ставки після завершення часу
+      Auction->>Lot: getHighestBid()
+      Lot-->>Auction: highestBid
       Auction->>Auction: determineWinner()
       Auction->>Auction: finalPrice = highestBid.amount
-      Auction->>AcquiringService: charge(winner, finalPrice)
-      AcquiringService-->>Auction: simulated charge
-      Auction-->>Bidder: Завершено з переможцем
+      Auction->>IAcquiringService: charge(winner, finalPrice)
+      IAcquiringService-->>Auction: simulated charge
+      Note over Auction: статус = Завершено з переможцем
+      Auction-->>Seller: результат торгів
+      Auction-->>Bidder: перемога і підсумкова ціна
     else Немає ставок
       Auction->>Auction: determineWinner() = null
-      Auction-->>Seller: Завершено без переможця
+      Note over Auction: статус = Завершено без переможця
+      Auction-->>Seller: результат без переможця
     end
   else Лот відхилено
     Moderator->>Auction: reject()
-    Auction-->>Seller: status = Відхилено
+    Note over Auction: статус = Відхилено
+    Auction-->>Seller: причина відхилення
   end

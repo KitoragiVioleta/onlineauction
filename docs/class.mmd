@@ -13,7 +13,7 @@ class Seller {
   +Seller(String participantId, String displayName)
   +override String getRole()
   +override boolean canPerform(Lot lot)
-  +Lot createLot(String description, double startingPrice)
+  +Lot createLot(String description, BigDecimal startingPrice)
   +void submitForModeration(Auction auction)
   +void withdraw(Auction auction)
 }
@@ -27,7 +27,7 @@ class Bidder {
 }
 
 class Moderator {
-  -List~Lot~ reviewedLots
+  -List~Auction~ reviewedAuctions
   +Moderator(String participantId, String displayName)
   +override String getRole()
   +override boolean canPerform(Lot lot)
@@ -40,23 +40,41 @@ class ITradingRules {
   +boolean canPerform(Lot lot)
 }
 
+class IAcquiringService {
+  <<interface>>
+  +void charge(Bidder bidder, BigDecimal amount)
+}
+
+class AuctionStatus {
+  -String label
+  +AuctionStatus(String label)
+  +String getLabel()
+  DRAFT
+  ON_MODERATION
+  REJECTED
+  ACTIVE
+  FINISHED_WITH_WINNER
+  FINISHED_WITHOUT_WINNER
+  WITHDRAWN
+}
+
 class Auction {
   -String auctionId
-  -String status
+  -AuctionStatus status
   -LocalDateTime startTime
   -LocalDateTime endTime
-  -double minimumIncrement
+  -BigDecimal minimumIncrement
   -Lot lot
-  -double finalPrice
+  -BigDecimal finalPrice
   -Bidder winner
-  -AcquiringService acquiringService
-  +Auction(String auctionId, Lot lot, LocalDateTime startTime, LocalDateTime endTime, double minimumIncrement, AcquiringService acquiringService)
+  -IAcquiringService acquiringService
+  +Auction(String auctionId, Lot lot, LocalDateTime startTime, LocalDateTime endTime, BigDecimal minimumIncrement, IAcquiringService acquiringService)
   +void submitForModeration()
   +void approve()
   +void reject()
   +void withdraw()
-  +boolean placeBid(Bidder bidder, double amount)
-  +boolean placeBid(Bidder bidder, double amount, LocalDateTime submittedAt)
+  +boolean placeBid(Bidder bidder, BigDecimal amount)
+  +boolean placeBid(Bidder bidder, BigDecimal amount, LocalDateTime submittedAt)
   +void close()
   +Bidder determineWinner()
 }
@@ -64,20 +82,20 @@ class Auction {
 class Lot {
   -String lotId
   -String description
-  -double startingPrice
+  -BigDecimal startingPrice
   -List~Bid~ bids
-  +Lot(String lotId, String description, double startingPrice)
-  +void addBid(Bid bid)
+  +Lot(String lotId, String description, BigDecimal startingPrice)
+  +Bid addBid(BigDecimal amount, LocalDateTime submittedAt, Bidder bidder)
   +Bid getHighestBid()
   +List~Bid~ getBids()
 }
 
 class Bid {
-  -double amount
+  -BigDecimal amount
   -LocalDateTime submittedAt
   -Bidder bidder
-  +Bid(double amount, LocalDateTime submittedAt, Bidder bidder)
-  +double getAmount()
+  +Bid(BigDecimal amount, LocalDateTime submittedAt, Bidder bidder)
+  +BigDecimal getAmount()
   +LocalDateTime getSubmittedAt()
   +Bidder getBidder()
 }
@@ -85,7 +103,7 @@ class Bid {
 class AcquiringService {
   -String merchantId
   +AcquiringService(String merchantId)
-  +void charge(Bidder bidder, double amount)
+  +void charge(Bidder bidder, BigDecimal amount)
 }
 
 AuctionParticipant <|-- Seller
@@ -94,7 +112,12 @@ AuctionParticipant <|-- Moderator
 Seller ..|> ITradingRules
 Bidder ..|> ITradingRules
 Moderator ..|> ITradingRules
+AcquiringService ..|> IAcquiringService
 Auction "1" --> "1" Lot : manages
 Lot "1" *-- "0..*" Bid : contains
-Bid --> Bidder : submitted by
-Auction ..> AcquiringService : charges through
+Bidder "1" -- "0..*" Bid : submits
+Auction "0..1" --> Bidder : winner
+Seller "1" --> "0..*" Lot : creates
+Moderator "1" --> "0..*" Auction : reviews
+Auction ..> IAcquiringService : charges through
+AuctionStatus --> Auction : describes
