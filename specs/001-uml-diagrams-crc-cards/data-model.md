@@ -100,21 +100,54 @@ FINISHED_WITHOUT_WINNER --> [*]
 переходить безпосередньо у кінцевий псевдостан. Ставки дозволені лише між
 переходом до `ACTIVE` та завершенням торгів.
 
+## Правила для діаграм і CRC-карток
+
+- `Auction` створює система в точці складання застосунку конструктором
+  `Auction(auctionId, lot, startTime, endTime, minimumIncrement,
+  acquiringService)`. Аргумент `acquiringService` має тип `IAcquiringService`;
+  конкретний `AcquiringService` передається як реалізація цієї абстракції.
+- На діаграмі послідовності створення аукціону показується як
+  `create participant Auction`, а поруч додається `Note` про впровадження
+  `IAcquiringService` через конструктор (DI).
+- На діаграмі послідовності створення лоту показується повідомлення
+  `Seller->>Lot: Lot(lotId, description, startingPrice)`. Усередині
+  `addBid(...)` створення ставки показується як
+  `Lot->>Bid: Bid(amount, submittedAt, bidder)`.
+- Перед фіксацією `finalPrice` на діаграмі послідовності
+  `Auction->>Lot: getHighestBid()`. Перед викликом `close()` додається
+  `Note` «після завершення часу торгів».
+- Сповіщення про зміну статусу на діаграмі послідовності показуються через
+  `Note`, а не пунктирною стрілкою-відповіддю.
+- На діаграмі станів має бути петля `ACTIVE --> ACTIVE` з умовою
+  `[ставка в межах часу і ≥ поточна ціна + minimumIncrement]`.
+- У CRC-картках і матриці співпрацівниками вважаються лише об'єкти, з якими
+  клас взаємодіє для виконання відповідальності. Суперкласи, підкласи та
+  реалізовані інтерфейси не вказуються як співпрацівники, оскільки
+  наслідування й реалізація не є співпрацею.
+- Для CRC-карток і матриці використовуються такі уточнення співпрацівників:
+  `AuctionParticipant` — `— (базовий клас для ролей)`;
+  `ITradingRules` — `Lot`; `IAcquiringService` — `Bidder`;
+  `AcquiringService` — `Bidder`; `AuctionStatus` — `Auction`.
+  У `Seller` співпрацівником не є `Moderator`.
+- Обов'язки в CRC-картках формулюються як дії класу, а не як обмеження.
+  Для `AcquiringService` використовуються обов'язки «Симулювати списання
+  коштів» і «Повідомляти про результат списання».
+
 ## Матриця узгодженості
 
 | Сутність | Роль у сценарії | Ключові операції | Стани/результати | Співпрацівники |
 |---|---|---|---|---|
-| `AuctionParticipant` | Спільна ідентичність ролей | `getRole()`, `getDisplayName()` | Не керує станом | `Seller`, `Bidder`, `Moderator` |
-| `Seller` | Створює, подає та знімає лот | `createLot()`, `submitForModeration()`, `withdraw()` | `DRAFT`, `ON_MODERATION`, `REJECTED`, `WITHDRAWN` | `Lot`, `Auction` |
-| `Bidder` | Подає ставки | `getSubmittedBids()` | Ставка лише в `ACTIVE` | `Auction`, `Bid` |
-| `Moderator` | Перевіряє аукціон | `approve()`, `reject()` | `ON_MODERATION` → `ACTIVE` або `REJECTED` | `Auction` |
-| `ITradingRules` | Контракт дозволу операцій | `canPerform()` | Дозвіл або відмова | Ролі учасників |
-| `IAcquiringService` | Контракт списання коштів | `charge()` | Симульоване списання після перемоги | `Auction`, `Bidder` |
-| `AuctionStatus` | Типізує стан аукціону | `getLabel()` | Сім визначених станів | `Auction` |
-| `Auction` | Керує торгами та результатом | `submitForModeration()`, `approve()`, `placeBid()`, `close()` | Усі стани `AuctionStatus` | `Lot`, `Bidder`, `ITradingRules`, `IAcquiringService` |
-| `Lot` | Зберігає опис і створює ставки | `addBid()`, `getHighestBid()` | Існує в межах `Auction` | `Bid`, `Bidder` |
-| `Bid` | Представляє прийняту ставку | `getAmount()`, `getSubmittedAt()` | Не існує без `Lot` | `Bidder`, `Lot` |
-| `AcquiringService` | Реалізує симульоване списання | `charge()` | Лише після перемоги | `IAcquiringService` |
+| `AuctionParticipant` | Ідентифікувати роль і надати ім'я учасника | `getRole()`, `getDisplayName()` | Не керує станом | — (базовий клас для ролей) |
+| `Seller` | Створювати лот; подавати його на модерацію; знімати лот | `createLot()`, `submitForModeration()`, `withdraw()` | `DRAFT`, `ON_MODERATION`, `REJECTED`, `WITHDRAWN` | `Lot`, `Auction` |
+| `Bidder` | Подавати ставки; переглядати власні ставки | `getSubmittedBids()` | Ставка лише в `ACTIVE` | `Auction`, `Bid` |
+| `Moderator` | Перевіряти аукціон; схвалювати або відхиляти його | `approve()`, `reject()` | `ON_MODERATION` → `ACTIVE` або `REJECTED` | `Auction` |
+| `ITradingRules` | Перевіряти можливість виконання операції | `canPerform()` | Дозвіл або відмова | `Lot` |
+| `IAcquiringService` | Приймати запит на списання коштів | `charge()` | Симульоване списання після перемоги | `Bidder` |
+| `AuctionStatus` | Повертати українську назву стану | `getLabel()` | Сім визначених станів | `Auction` |
+| `Auction` | Створюватися системою через конструктор у точці складання; керувати життєвим циклом; перевіряти ставки; завершувати торги; визначати переможця | `Auction(auctionId, lot, startTime, endTime, minimumIncrement, acquiringService)`, `submitForModeration()`, `approve()`, `placeBid()`, `close()` | Усі стани `AuctionStatus` | `Lot`, `Bidder`, `IAcquiringService` |
+| `Lot` | Зберігати опис; створювати й зберігати ставки; повертати найвищу ставку | `addBid()`, `getHighestBid()` | Існує в межах `Auction` | `Bid`, `Bidder` |
+| `Bid` | Зберігати суму, час подання та учасника ставки | `getAmount()`, `getSubmittedAt()` | Не існує без `Lot` | `Bidder`, `Lot` |
+| `AcquiringService` | Симулювати списання коштів; повідомляти про результат списання | `charge()` | Лише після перемоги | `Bidder` |
 
 ## Правила узгодження динамічних артефактів
 
