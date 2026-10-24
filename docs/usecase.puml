@@ -11,7 +11,6 @@ rectangle "Онлайн-аукціон" {
   usecase "Зняти лот" as UC_WithdrawLot
   usecase "Перевірити лот" as UC_ReviewLot
   usecase "Подати ставку\nу межах часу торгів" as UC_PlaceBid
-  usecase "Завершення часу торгів" as UC_AuctionTimeout
   usecase "Визначити переможця" as UC_DetermineWinner
   usecase "Зафіксувати підсумкову ціну" as UC_FinalPrice
 }
@@ -21,8 +20,10 @@ Seller --> UC_WithdrawLot
 Moderator --> UC_ReviewLot
 Bidder --> UC_PlaceBid
 
-UC_AuctionTimeout --> UC_DetermineWinner : ініціює система
 UC_DetermineWinner ..> UC_FinalPrice : <<include>>
 UC_DetermineWinner --> Seller : повідомлення про результат
 UC_DetermineWinner --> Bidder : повідомлення про результат
+note bottom of UC_DetermineWinner
+  Ініціює система після завершення часу торгів
+end note
 @enduml
