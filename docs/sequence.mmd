@@ -17,8 +17,8 @@ sequenceDiagram
     Moderator->>Auction: approve()
     Note over Auction: статус = Активні торги
     Bidder->>Bidder: canPerform(Lot)
+    Bidder->>Auction: placeBid(bidder, amount, submittedAt)
     alt Ставка в часі та відповідає minimumIncrement
-      Bidder->>Auction: placeBid(bidder, amount, submittedAt)
       Auction->>Lot: addBid(amount, submittedAt, bidder)
       Lot->>Bid: Bid(amount, submittedAt, bidder)
       Lot-->>Auction: accepted Bid
