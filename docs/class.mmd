@@ -121,4 +121,8 @@ Auction --> "0..1" Bidder : winner
 Seller "1" --> "0..*" Lot : creates
 Moderator "1" --> "0..*" Auction : reviews
 Auction ..> IAcquiringService : charges through
+Seller ..> Auction : submitForModeration, withdraw
+ITradingRules ..> Lot : canPerform
+IAcquiringService ..> Bidder : charge
+Lot ..> Bidder : addBid
 Auction --> AuctionStatus : status

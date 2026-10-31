@@ -46,6 +46,14 @@
   існує без лоту.
 - `Moderator "1" --> "0..*" Auction` — модератор перевіряє нуль або більше
   аукціонів, що зберігаються в `reviewedAuctions`.
+- `Seller ..> Auction` — залежність через параметри методів
+  `submitForModeration(Auction auction)` і `withdraw(Auction auction)`.
+- `ITradingRules ..> Lot` — залежність через параметр методу
+  `canPerform(Lot lot)`.
+- `IAcquiringService ..> Bidder` — залежність через параметр методу
+  `charge(Bidder bidder, BigDecimal amount)`.
+- `Lot ..> Bidder` — залежність через параметр методу
+  `addBid(BigDecimal amount, LocalDateTime submittedAt, Bidder bidder)`.
 
 ## Правила відповідальностей і поведінки
 
