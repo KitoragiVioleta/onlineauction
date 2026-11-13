@@ -10,28 +10,38 @@ sequenceDiagram
   Seller->>Seller: createLot(lotId, description, startingPrice)
   Seller->>Lot: Lot(lotId, description, startingPrice)
   Seller->>Seller: createAuction(auctionId, lot, startTime, endTime, minimumIncrement, acquiringService)
+  Seller->>Seller: canPerform(lot)
   Seller->>Auction: Auction(auctionId, lot, startTime, endTime, minimumIncrement, acquiringService)
   Note over Auction,IAcquiringService: залежність впроваджується через конструктор
-  Seller->>Seller: canPerform(Lot)
+  Seller->>Auction: getLot()
+  Seller->>Seller: canPerform(lot)
   Seller->>Auction: submitForModeration()
   Note over Auction: статус = На модерації
-  Moderator->>Moderator: canPerform(Lot)
   alt Лот схвалено
+    Moderator->>Auction: getLot()
+    Moderator->>Moderator: canPerform(lot)
     Moderator->>Auction: approve()
     Note over Auction: статус = Активні торги
-    Bidder->>Bidder: canPerform(Lot)
+    Bidder->>Auction: getLot()
+    Bidder->>Bidder: canPerform(lot)
     Bidder->>Auction: placeBid(bidder, amount, submittedAt)
-    alt Ставка в часі та відповідає minimumIncrement
+    alt Стан активний і час у межах
       Auction->>Lot: getBids()
       Lot-->>Auction: bids
-      Auction->>Lot: getHighestBid()
-      Lot-->>Auction: highestBid
-      Auction->>Lot: addBid(amount, submittedAt, bidder)
-      Lot->>Bid: Bid(amount, submittedAt, bidder)
-      Lot-->>Auction: accepted Bid
-      Auction->>Bidder: recordBid(bid)
-      Auction-->>Bidder: ставка прийнята
-    else Ставка поза часом або замала
+      opt Є прийняті ставки
+        Auction->>Lot: getHighestBid()
+        Lot-->>Auction: highestBid
+      end
+      alt Сума достатня
+        Auction->>Lot: addBid(amount, submittedAt, bidder)
+        Lot->>Bid: Bid(amount, submittedAt, bidder)
+        Lot-->>Auction: accepted Bid
+        Auction->>Bidder: recordBid(bid)
+        Auction-->>Bidder: ставка прийнята
+      else Сума замала
+        Auction-->>Bidder: ставка відхилена
+      end
+    else Аукціон неактивний або час поза межами
       Auction-->>Bidder: ставка відхилена
     end
     Note over Auction,Lot: За однакової суми перемагає раніша прийнята ставка
@@ -53,34 +63,57 @@ sequenceDiagram
       Note over Auction: статус = Завершено без переможця
     end
   else Лот відхилено
+    Moderator->>Auction: getLot()
+    Moderator->>Moderator: canPerform(lot)
     Moderator->>Auction: reject(reason)
     Note over Auction: статус = Відхилено
+    Seller->>Auction: getLot()
+    Seller->>Seller: canPerform(lot)
     Seller->>Auction: submitForModeration()
     Note over Auction: статус = На модерації
   end
   opt Ставка після завершення
+    Bidder->>Auction: getLot()
+    Bidder->>Bidder: canPerform(lot)
     Bidder->>Auction: placeBid(bidder, amount, submittedAt)
     Auction-->>Bidder: відхилення через стан, кількість ставок не змінилась
   end
   opt Спроба зняти активний лот
+    Seller->>Auction: getLot()
+    Seller->>Seller: canPerform(lot)
     Seller->>Auction: withdraw()
     Note over Auction: відмова без зміни стану Активні торги
   end
   opt Однакові суми
     Seller->>Seller: createAuction(..., minimumIncrement = 0.00, acquiringService)
+    Seller->>Seller: canPerform(lot)
     Seller->>Auction: Auction(...)
+    Seller->>Auction: getLot()
+    Seller->>Seller: canPerform(lot)
     Seller->>Auction: submitForModeration()
+    Moderator->>Auction: getLot()
+    Moderator->>Moderator: canPerform(lot)
     Moderator->>Auction: approve()
+    Bidder->>Auction: getLot()
+    Bidder->>Bidder: canPerform(lot)
     Bidder->>Auction: placeBid(bidder, sameAmount, earlierTime)
+    Bidder->>Auction: getLot()
+    Bidder->>Bidder: canPerform(lot)
     Bidder->>Auction: placeBid(bidder, sameAmount, laterTime)
     Auction->>Auction: close()
     Note over Auction: переможець = раніша ставка
   end
   alt Лот знято до активації
+    Seller->>Auction: getLot()
+    Seller->>Seller: canPerform(lot)
     Seller->>Auction: withdraw() [На модерації]
     Note over Auction: статус = Знято
   else Відхилений лот знято
+    Moderator->>Auction: getLot()
+    Moderator->>Moderator: canPerform(lot)
     Moderator->>Auction: reject(reason)
+    Seller->>Auction: getLot()
+    Seller->>Seller: canPerform(lot)
     Seller->>Auction: withdraw()
     Note over Auction: Відхилено -> Знято
   else Активний лот без ставок

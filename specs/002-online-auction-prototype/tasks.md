@@ -211,3 +211,7 @@ Task: "Створити src/onlineauction/AcquiringService.java"
 
 - [X] T041 Узгодити `docs/sequence.mmd` з фактичним шляхом завершення активного аукціону без ставок, вилучивши або реалізувавши виклик `determineWinner() = null` per FR-012 / SC-004 (partial)
 
+## Phase 9: Convergence
+
+- [X] T042 Узгодити `docs/sequence.mmd` з усіма фактичними викликами `canPerform` у створенні та альтернативних операціях і показати умовний виклик `getHighestBid` лише для непорожнього списку ставок per FR-012 / SC-004 (partial)
+
