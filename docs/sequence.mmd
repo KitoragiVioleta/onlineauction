@@ -55,7 +55,7 @@ sequenceDiagram
   end
   opt Ставка після завершення
     Bidder->>Auction: placeBid(bidder, amount, submittedAt)
-    Auction-->>Bidder: відхилення через стан; кількість ставок не змінилась
+    Auction-->>Bidder: відхилення через стан, кількість ставок не змінилась
   end
   opt Однакові суми
     Seller->>Auction: createAuction(..., minimumIncrement = 0.00, acquiringService)
@@ -64,7 +64,7 @@ sequenceDiagram
     Bidder->>Auction: placeBid(firstBidder, sameAmount, earlierTime)
     Bidder->>Auction: placeBid(secondBidder, sameAmount, laterTime)
     Auction->>Auction: close()
-    Auction-->>Seller: переможець = раніша ставка
+    Auction-)Seller: переможець = раніша ставка
   end
   alt Лот знято до активації
     Seller->>Auction: withdraw() [На модерації]
