@@ -28,6 +28,15 @@ public final class Main {
         auction.placeBid(secondBidder, new BigDecimal("115.00"), start.plusMinutes(20));
         auction.placeBid(firstBidder, new BigDecimal("120.00"), start.plusMinutes(20));
         auction.close();
+        auction.placeBid(secondBidder, new BigDecimal("130.00"), end);
+
+        System.out.println("=== Tie-break однакових сум ===");
+        Lot tieLot = seller.createLot("lot-tie", "Лот для tie-break", new BigDecimal("1.00"));
+        Bid earlierTieBid = tieLot.addBid(new BigDecimal("200.00"), start.plusMinutes(5), firstBidder);
+        tieLot.addBid(new BigDecimal("200.00"), start.plusMinutes(6), secondBidder);
+        System.out.printf("Tie-break: переможець %s за ранішою ставкою о %s%n",
+                tieLot.getHighestBid().getBidder().getDisplayName(),
+                earlierTieBid.getSubmittedAt());
 
         System.out.println("=== Відхилення та повторне подання ===");
         Lot rejectedLot = seller.createLot("lot-2", "Навчальний лот", new BigDecimal("50.00"));
@@ -38,6 +47,13 @@ public final class Main {
         System.out.printf("Повідомлення продавцю: аукціон %s відхилено; причина: %s%n",
                 rejectedAuction.getAuctionId(), rejectedAuction.getRejectionReason());
         seller.submitForModeration(rejectedAuction);
+        seller.withdraw(rejectedAuction);
+
+        Lot moderationLot = seller.createLot("lot-2b", "Лот на модерації", new BigDecimal("55.00"));
+        Auction moderationAuction = seller.createAuction("auction-2b", moderationLot, start, end,
+                new BigDecimal("5.00"), acquiringService);
+        seller.submitForModeration(moderationAuction);
+        seller.withdraw(moderationAuction);
 
         System.out.println("=== Альтернативні завершення ===");
         Lot withdrawnLot = seller.createLot("lot-3", "Лот для зняття", new BigDecimal("20.00"));

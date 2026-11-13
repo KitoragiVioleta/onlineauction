@@ -152,7 +152,10 @@ public final class Auction {
     }
 
     private void rejectOperation(String operation, String reason) {
-        System.out.printf("Операцію відхилено: %s; стан: %s; причина: %s%n",
-                operation, status.getLabel(), reason);
+        String bidCount = operation.equals("Подання ставки")
+                ? "; прийнятих ставок не змінилося: " + lot.getBids().size()
+                : "";
+        System.out.printf("Операцію відхилено: %s; стан: %s; причина: %s%s%n",
+                operation, status.getLabel(), reason, bidCount);
     }
 }

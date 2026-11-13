@@ -4,6 +4,7 @@ class AuctionParticipant {
   -String participantId
   -String displayName
   +AuctionParticipant(String participantId, String displayName)
+  +String getParticipantId()
   +abstract String getRole()
   +final String getDisplayName()
 }
@@ -14,8 +15,10 @@ class Seller {
   +override String getRole()
   +override boolean canPerform(Lot lot)
   +Lot createLot(String lotId, String description, BigDecimal startingPrice)
+  +Auction createAuction(String auctionId, Lot lot, LocalDateTime startTime, LocalDateTime endTime, BigDecimal minimumIncrement, IAcquiringService acquiringService)
   +void submitForModeration(Auction auction)
   +void withdraw(Auction auction)
+  +List~Lot~ getLots()
 }
 
 class Bidder {
@@ -70,10 +73,17 @@ class Auction {
   -BigDecimal finalPrice
   -Bidder winner
   -IAcquiringService acquiringService
+  -String rejectionReason
   +Auction(String auctionId, Lot lot, LocalDateTime startTime, LocalDateTime endTime, BigDecimal minimumIncrement, IAcquiringService acquiringService)
+  +String getAuctionId()
+  +Lot getLot()
+  +AuctionStatus getStatus()
+  +BigDecimal getFinalPrice()
+  +Bidder getWinner()
+  +String getRejectionReason()
   +void submitForModeration()
   +void approve()
-  +void reject()
+  +void reject(String reason)
   +void withdraw()
   +boolean placeBid(Bidder bidder, BigDecimal amount)
   +boolean placeBid(Bidder bidder, BigDecimal amount, LocalDateTime submittedAt)
@@ -87,6 +97,9 @@ class Lot {
   -BigDecimal startingPrice
   -List~Bid~ bids
   +Lot(String lotId, String description, BigDecimal startingPrice)
+  +String getLotId()
+  +String getDescription()
+  +BigDecimal getStartingPrice()
   +Bid addBid(BigDecimal amount, LocalDateTime submittedAt, Bidder bidder)
   +Bid getHighestBid()
   +List~Bid~ getBids()
@@ -123,6 +136,7 @@ Seller "1" --> "0..*" Lot : creates
 Moderator "1" --> "0..*" Auction : reviews
 Auction ..> IAcquiringService : charges through
 Seller ..> Auction : submitForModeration, withdraw
+Seller ..> IAcquiringService : createAuction parameter
 ITradingRules ..> Lot : canPerform
 IAcquiringService ..> Bidder : charge
 Lot ..> Bidder : addBid

@@ -7,8 +7,9 @@
 сценаріїв.
 
 ```text
-javac --release 17 -d build (Get-ChildItem -Recurse src -Filter *.java).FullName
-java -cp build onlineauction.Main
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+javac -encoding UTF-8 --release 17 -d build (Get-ChildItem -Recurse src -Filter *.java).FullName
+java '-Dstdout.encoding=UTF-8' -cp build onlineauction.Main
 ```
 
 Для Linux/macOS bash:
@@ -16,8 +17,8 @@ java -cp build onlineauction.Main
 ```bash
 rm -rf build
 mkdir -p build
-javac --release 17 -d build $(find src -name '*.java')
-java -cp build onlineauction.Main
+javac -encoding UTF-8 --release 17 -d build $(find src -name '*.java')
+java -Dstdout.encoding=UTF-8 -cp build onlineauction.Main
 ```
 
 ## Обов'язкові результати stdout
@@ -34,6 +35,9 @@ java -cp build onlineauction.Main
 - зняття лоту з дозволеного стану;
 - неможливість зняття активного лоту;
 - завершення активного аукціону без ставок.
+- відхилення ставки після завершення торгів через поточний стан;
+- tie-break двох однакових сум на користь ранішої ставки;
+- зняття лоту зі станів `На модерації` і `Відхилено`.
 
 Кожен зі станів `Чернетка`, `На модерації`, `Відхилено`, `Активні торги`,
 `Завершено з переможцем`, `Завершено без переможця` і `Знято` має бути
@@ -43,6 +47,7 @@ java -cp build onlineauction.Main
 
 - Один запуск детермінований і не залежить від системного часу.
 - Відхилена ставка не змінює кількість прийнятих ставок.
+- Повідомлення про відхилену ставку містить незмінну кількість прийнятих ставок.
 - Несумісний перехід не змінює стан аукціону.
 - Для першої ставки мінімумом є стартова ціна; для наступних — поточна
   найвища ставка плюс мінімальний крок.

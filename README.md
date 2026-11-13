@@ -11,10 +11,11 @@ Standalone CLI-прототип на Java 17 демонструє життєви
 ## Windows PowerShell
 
 ```powershell
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 Remove-Item -Recurse -Force build -ErrorAction SilentlyContinue
 New-Item -ItemType Directory build | Out-Null
-javac --release 17 -d build (Get-ChildItem -Recurse src -Filter *.java).FullName
-java -cp build onlineauction.Main
+javac -encoding UTF-8 --release 17 -d build (Get-ChildItem -Recurse src -Filter *.java).FullName
+java '-Dstdout.encoding=UTF-8' -cp build onlineauction.Main
 ```
 
 ## Linux/macOS bash
@@ -22,8 +23,8 @@ java -cp build onlineauction.Main
 ```bash
 rm -rf build
 mkdir -p build
-javac --release 17 -d build $(find src -name '*.java')
-java -cp build onlineauction.Main
+javac -encoding UTF-8 --release 17 -d build $(find src -name '*.java')
+java -Dstdout.encoding=UTF-8 -cp build onlineauction.Main
 ```
 
 Запуск не читає stdin, є детермінованим і має завершуватися з кодом `0` не

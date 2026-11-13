@@ -9,10 +9,11 @@
 ## Компіляція та запуск
 
 ```powershell
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 Remove-Item -Recurse -Force build -ErrorAction SilentlyContinue
 New-Item -ItemType Directory build | Out-Null
-javac --release 17 -d build (Get-ChildItem -Recurse src -Filter *.java).FullName
-java -cp build onlineauction.Main
+javac -encoding UTF-8 --release 17 -d build (Get-ChildItem -Recurse src -Filter *.java).FullName
+java '-Dstdout.encoding=UTF-8' -cp build onlineauction.Main
 ```
 
 Очікується завершення з кодом `0` не більш ніж за 10 секунд без запиту
@@ -43,6 +44,8 @@ java -cp build onlineauction.Main
 Додатково перевіряється, що ставка в момент `startTime` і в момент `endTime`
 приймається, а ставка після `endTime` відхиляється до перевірки суми. Для
 кожної невдалої спроби кількість і склад `Lot.getBids()` не змінюються.
+Також перевіряються відхилення ставки після завершення, tie-break за ранішою
+ставкою однакової суми та зняття зі станів `На модерації` і `Відхилено`.
 
 ## Перевірка документації
 

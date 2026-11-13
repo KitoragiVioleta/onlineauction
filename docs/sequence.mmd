@@ -2,6 +2,7 @@ sequenceDiagram
   actor Seller
   actor Moderator
   actor Bidder
+  participant Main
   participant Auction
   participant Lot
   participant Bid
@@ -9,7 +10,8 @@ sequenceDiagram
 
   Seller->>Seller: createLot(description, startingPrice)
   Seller->>Lot: Lot(lotId, description, startingPrice)
-  Note over Auction: Auction(auctionId, lot, startTime, endTime, minimumIncrement, acquiringService) створює система, IAcquiringService передається через конструктор (DI)
+  Seller->>Auction: createAuction(auctionId, lot, startTime, endTime, minimumIncrement, acquiringService)
+  Auction->>IAcquiringService: залежність через конструктор (DI)
   Seller->>Auction: submitForModeration()
   Note over Auction: статус = На модерації
   Moderator->>Moderator: canPerform(Lot)
@@ -45,14 +47,23 @@ sequenceDiagram
       Auction-)Seller: результат без переможця
     end
   else Лот відхилено
-    Moderator->>Auction: reject()
+    Moderator->>Auction: reject(reason)
     Note over Auction: статус = Відхилено
     Auction-)Seller: причина відхилення
     Seller->>Auction: submitForModeration()
     Note over Auction: статус = На модерації
   end
+  opt Ставка після завершення
+    Bidder->>Auction: placeBid(bidder, amount, submittedAt)
+    Auction-->>Bidder: відхилення через стан; кількість ставок не змінилась
+  end
+  opt Однакові суми
+    Main->>Lot: addBid(sameAmount, earlierTime, firstBidder)
+    Main->>Lot: addBid(sameAmount, laterTime, secondBidder)
+    Lot-->>Main: getHighestBid() = раніша ставка
+  end
   alt Лот знято до активації
-    Seller->>Auction: withdraw()
+    Seller->>Auction: withdraw() [На модерації або Відхилено]
     Note over Auction: статус = Знято
   else Активний лот без ставок
     Auction->>Auction: close()
