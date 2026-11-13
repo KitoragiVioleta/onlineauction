@@ -207,3 +207,7 @@ Task: "Створити src/onlineauction/AcquiringService.java"
 - [X] T039 Додати після завершення аукціону з переможцем окремі україномовні повідомлення продавцю та переможцю з підсумковою ціною per US1/AC3, FR-007 (partial)
 - [X] T040 Узгодити `ITradingRules.canPerform` і його використання з рольовими операціями продавця, учасника торгів і модератора та продемонструвати ці перевірки per plan: ролі та `ITradingRules`, FR-001 (partial)
 
+## Phase 8: Convergence
+
+- [X] T041 Узгодити `docs/sequence.mmd` з фактичним шляхом завершення активного аукціону без ставок, вилучивши або реалізувавши виклик `determineWinner() = null` per FR-012 / SC-004 (partial)
+
