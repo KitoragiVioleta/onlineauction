@@ -24,8 +24,8 @@ public final class Auction {
         if (!startTime.isBefore(endTime)) {
             throw new IllegalArgumentException("Час початку має бути раніше часу завершення");
         }
-        if (minimumIncrement == null || minimumIncrement.signum() <= 0) {
-            throw new IllegalArgumentException("Мінімальний крок має бути додатним");
+        if (minimumIncrement == null || minimumIncrement.signum() < 0) {
+            throw new IllegalArgumentException("Мінімальний крок не може бути від'ємним");
         }
         this.minimumIncrement = minimumIncrement;
         this.acquiringService = AuctionParticipant.requireNonNull(acquiringService, "Сервіс еквайрингу");

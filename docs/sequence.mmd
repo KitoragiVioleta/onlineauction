@@ -58,13 +58,21 @@ sequenceDiagram
     Auction-->>Bidder: відхилення через стан; кількість ставок не змінилась
   end
   opt Однакові суми
-    Main->>Lot: addBid(sameAmount, earlierTime, firstBidder)
-    Main->>Lot: addBid(sameAmount, laterTime, secondBidder)
-    Lot-->>Main: getHighestBid() = раніша ставка
+    Seller->>Auction: createAuction(..., minimumIncrement = 0.00, acquiringService)
+    Seller->>Auction: submitForModeration()
+    Moderator->>Auction: approve()
+    Bidder->>Auction: placeBid(firstBidder, sameAmount, earlierTime)
+    Bidder->>Auction: placeBid(secondBidder, sameAmount, laterTime)
+    Auction->>Auction: close()
+    Auction-->>Seller: переможець = раніша ставка
   end
   alt Лот знято до активації
-    Seller->>Auction: withdraw() [На модерації або Відхилено]
+    Seller->>Auction: withdraw() [На модерації]
     Note over Auction: статус = Знято
+  else Відхилений лот знято
+    Moderator->>Auction: reject(reason)
+    Seller->>Auction: withdraw()
+    Note over Auction: Відхилено -> Знято
   else Активний лот без ставок
     Auction->>Auction: close()
     Note over Auction: статус = Завершено без переможця
