@@ -7,7 +7,7 @@ sequenceDiagram
   participant Bid
   participant IAcquiringService
 
-  Seller->>Seller: createLot(description, startingPrice)
+  Seller->>Seller: createLot(lotId, description, startingPrice)
   Seller->>Lot: Lot(lotId, description, startingPrice)
   Seller->>Seller: createAuction(auctionId, lot, startTime, endTime, minimumIncrement, acquiringService)
   Seller->>Auction: Auction(auctionId, lot, startTime, endTime, minimumIncrement, acquiringService)
@@ -36,19 +36,17 @@ sequenceDiagram
     alt Є прийняті ставки після завершення часу
       Auction->>Auction: determineWinner()
       Auction->>Auction: finalPrice = highestBid.amount
-      Auction->>IAcquiringService: charge(winner, finalPrice)
-      IAcquiringService-->>Auction: simulated charge
       Note over Auction: статус = Завершено з переможцем
       Auction-)Seller: результат торгів
       Auction-)Bidder: перемога і підсумкова ціна
+      Auction->>IAcquiringService: charge(winner, finalPrice)
+      IAcquiringService-->>Auction: simulated charge
     else Немає ставок
       Note over Auction: статус = Завершено без переможця
-      Auction-)Seller: результат без переможця
     end
   else Лот відхилено
     Moderator->>Auction: reject(reason)
     Note over Auction: статус = Відхилено
-    Auction-)Seller: причина відхилення
     Seller->>Auction: submitForModeration()
     Note over Auction: статус = На модерації
   end
@@ -64,7 +62,7 @@ sequenceDiagram
     Bidder->>Auction: placeBid(bidder, sameAmount, earlierTime)
     Bidder->>Auction: placeBid(bidder, sameAmount, laterTime)
     Auction->>Auction: close()
-    Auction-)Seller: переможець = раніша ставка
+    Note over Auction: переможець = раніша ставка
   end
   alt Лот знято до активації
     Seller->>Auction: withdraw() [На модерації]
