@@ -19,7 +19,7 @@ sequenceDiagram
     Moderator->>Auction: approve()
     Note over Auction: статус = Активні торги
     Bidder->>Bidder: canPerform(Lot)
-    Bidder->>Auction: placeBid(auction, amount, submittedAt)
+    Bidder->>Auction: placeBid(bidder, amount, submittedAt)
     alt Ставка в часі та відповідає minimumIncrement
       Auction->>Lot: addBid(amount, submittedAt, bidder)
       Lot->>Bid: Bid(amount, submittedAt, bidder)
@@ -54,15 +54,16 @@ sequenceDiagram
     Note over Auction: статус = На модерації
   end
   opt Ставка після завершення
-    Bidder->>Auction: placeBid(auction, amount, submittedAt)
+    Bidder->>Auction: placeBid(bidder, amount, submittedAt)
     Auction-->>Bidder: відхилення через стан, кількість ставок не змінилась
   end
   opt Однакові суми
-    Seller->>Auction: createAuction(..., minimumIncrement = 0.00, acquiringService)
+    Seller->>Seller: createAuction(..., minimumIncrement = 0.00, acquiringService)
+    Seller->>Auction: Auction(...)
     Seller->>Auction: submitForModeration()
     Moderator->>Auction: approve()
-    Bidder->>Auction: placeBid(auction, sameAmount, earlierTime)
-    Bidder->>Auction: placeBid(auction, sameAmount, laterTime)
+    Bidder->>Auction: placeBid(bidder, sameAmount, earlierTime)
+    Bidder->>Auction: placeBid(bidder, sameAmount, laterTime)
     Auction->>Auction: close()
     Auction-)Seller: переможець = раніша ставка
   end
