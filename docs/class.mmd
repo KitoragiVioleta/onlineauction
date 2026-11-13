@@ -13,7 +13,7 @@ class Seller {
   +Seller(String participantId, String displayName)
   +override String getRole()
   +override boolean canPerform(Lot lot)
-  +Lot createLot(String description, BigDecimal startingPrice)
+  +Lot createLot(String lotId, String description, BigDecimal startingPrice)
   +void submitForModeration(Auction auction)
   +void withdraw(Auction auction)
 }
@@ -33,6 +33,7 @@ class Moderator {
   +override boolean canPerform(Lot lot)
   +void approve(Auction auction)
   +void reject(Auction auction)
+  +void reject(Auction auction, String reason)
 }
 
 class ITradingRules {

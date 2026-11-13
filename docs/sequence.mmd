@@ -48,4 +48,13 @@ sequenceDiagram
     Moderator->>Auction: reject()
     Note over Auction: статус = Відхилено
     Auction-)Seller: причина відхилення
+    Seller->>Auction: submitForModeration()
+    Note over Auction: статус = На модерації
+  end
+  alt Лот знято до активації
+    Seller->>Auction: withdraw()
+    Note over Auction: статус = Знято
+  else Активний лот без ставок
+    Auction->>Auction: close()
+    Note over Auction: статус = Завершено без переможця
   end
