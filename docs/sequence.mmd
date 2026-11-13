@@ -12,6 +12,7 @@ sequenceDiagram
   Seller->>Seller: createAuction(auctionId, lot, startTime, endTime, minimumIncrement, acquiringService)
   Seller->>Auction: Auction(auctionId, lot, startTime, endTime, minimumIncrement, acquiringService)
   Note over Auction,IAcquiringService: залежність впроваджується через конструктор
+  Seller->>Seller: canPerform(Lot)
   Seller->>Auction: submitForModeration()
   Note over Auction: статус = На модерації
   Moderator->>Moderator: canPerform(Lot)
@@ -21,9 +22,14 @@ sequenceDiagram
     Bidder->>Bidder: canPerform(Lot)
     Bidder->>Auction: placeBid(bidder, amount, submittedAt)
     alt Ставка в часі та відповідає minimumIncrement
+      Auction->>Lot: getBids()
+      Lot-->>Auction: bids
+      Auction->>Lot: getHighestBid()
+      Lot-->>Auction: highestBid
       Auction->>Lot: addBid(amount, submittedAt, bidder)
       Lot->>Bid: Bid(amount, submittedAt, bidder)
       Lot-->>Auction: accepted Bid
+      Auction->>Bidder: recordBid(bid)
       Auction-->>Bidder: ставка прийнята
     else Ставка поза часом або замала
       Auction-->>Bidder: ставка відхилена
@@ -35,6 +41,8 @@ sequenceDiagram
     Lot-->>Auction: highestBid
     alt Є прийняті ставки після завершення часу
       Auction->>Auction: determineWinner()
+      Auction->>Lot: getHighestBid()
+      Lot-->>Auction: highestBid
       Auction->>Auction: finalPrice = highestBid.amount
       Note over Auction: статус = Завершено з переможцем
       Auction-)Seller: результат торгів
@@ -53,6 +61,10 @@ sequenceDiagram
   opt Ставка після завершення
     Bidder->>Auction: placeBid(bidder, amount, submittedAt)
     Auction-->>Bidder: відхилення через стан, кількість ставок не змінилась
+  end
+  opt Спроба зняти активний лот
+    Seller->>Auction: withdraw()
+    Note over Auction: відмова без зміни стану Активні торги
   end
   opt Однакові суми
     Seller->>Seller: createAuction(..., minimumIncrement = 0.00, acquiringService)
