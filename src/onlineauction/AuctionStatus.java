@@ -1,5 +1,6 @@
 package onlineauction;
 
+/** Сім станів життєвого циклу аукціону з україномовними мітками. */
 public enum AuctionStatus {
     DRAFT("Чернетка"),
     ON_MODERATION("На модерації"),
@@ -16,6 +17,7 @@ public enum AuctionStatus {
     }
 
     public String getLabel() {
+        // Повертає мітку стану для консольного повідомлення.
         return label;
     }
 }

@@ -2,7 +2,6 @@ sequenceDiagram
   actor Seller
   actor Moderator
   actor Bidder
-  participant Main
   participant Auction
   participant Lot
   participant Bid
@@ -10,8 +9,9 @@ sequenceDiagram
 
   Seller->>Seller: createLot(description, startingPrice)
   Seller->>Lot: Lot(lotId, description, startingPrice)
-  Seller->>Auction: createAuction(auctionId, lot, startTime, endTime, minimumIncrement, acquiringService)
-  Auction->>IAcquiringService: залежність через конструктор (DI)
+  Seller->>Seller: createAuction(auctionId, lot, startTime, endTime, minimumIncrement, acquiringService)
+  Seller->>Auction: Auction(auctionId, lot, startTime, endTime, minimumIncrement, acquiringService)
+  Note over Auction,IAcquiringService: залежність впроваджується через конструктор
   Seller->>Auction: submitForModeration()
   Note over Auction: статус = На модерації
   Moderator->>Moderator: canPerform(Lot)
@@ -19,7 +19,7 @@ sequenceDiagram
     Moderator->>Auction: approve()
     Note over Auction: статус = Активні торги
     Bidder->>Bidder: canPerform(Lot)
-    Bidder->>Auction: placeBid(bidder, amount, submittedAt)
+    Bidder->>Auction: placeBid(auction, amount, submittedAt)
     alt Ставка в часі та відповідає minimumIncrement
       Auction->>Lot: addBid(amount, submittedAt, bidder)
       Lot->>Bid: Bid(amount, submittedAt, bidder)
@@ -54,15 +54,15 @@ sequenceDiagram
     Note over Auction: статус = На модерації
   end
   opt Ставка після завершення
-    Bidder->>Auction: placeBid(bidder, amount, submittedAt)
+    Bidder->>Auction: placeBid(auction, amount, submittedAt)
     Auction-->>Bidder: відхилення через стан, кількість ставок не змінилась
   end
   opt Однакові суми
     Seller->>Auction: createAuction(..., minimumIncrement = 0.00, acquiringService)
     Seller->>Auction: submitForModeration()
     Moderator->>Auction: approve()
-    Bidder->>Auction: placeBid(firstBidder, sameAmount, earlierTime)
-    Bidder->>Auction: placeBid(secondBidder, sameAmount, laterTime)
+    Bidder->>Auction: placeBid(auction, sameAmount, earlierTime)
+    Bidder->>Auction: placeBid(auction, sameAmount, laterTime)
     Auction->>Auction: close()
     Auction-)Seller: переможець = раніша ставка
   end

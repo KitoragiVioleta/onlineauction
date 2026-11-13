@@ -3,11 +3,13 @@ package onlineauction;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/** Композиційний корінь детермінованої консольної демонстрації. */
 public final class Main {
     private Main() {
     }
 
     public static void main(String[] args) {
+        // Послідовно запускає детерміновані основний та альтернативні сценарії.
         IAcquiringService acquiringService = new AcquiringService("DEMO-MERCHANT");
         Seller seller = new Seller("seller-1", "Олена-продавець");
         Moderator moderator = new Moderator("moderator-1", "Ірина-модератор");
@@ -32,8 +34,8 @@ public final class Main {
         auction.close();
         secondBidder.placeBid(auction, new BigDecimal("130.00"), end);
 
-        System.out.println("=== Tie-break однакових сум ===");
-        Lot tieLot = seller.createLot("lot-tie", "Лот для tie-break", new BigDecimal("1.00"));
+        System.out.println("=== Однакові суми ставок ===");
+        Lot tieLot = seller.createLot("lot-tie", "Лот для однакових сум ставок", new BigDecimal("1.00"));
         Auction tieAuction = seller.createAuction("auction-tie", tieLot, start, end,
                 new BigDecimal("0.00"), acquiringService);
         seller.submitForModeration(tieAuction);
@@ -41,7 +43,7 @@ public final class Main {
         firstBidder.placeBid(tieAuction, new BigDecimal("200.00"), start.plusMinutes(5));
         secondBidder.placeBid(tieAuction, new BigDecimal("200.00"), start.plusMinutes(6));
         tieAuction.close();
-        System.out.printf("Tie-break: переможець %s за ранішою ставкою%n",
+        System.out.printf("Однакові суми ставок: переможець %s за ранішою ставкою%n",
                 tieAuction.getWinner().getDisplayName());
 
         System.out.println("=== Відхилення та повторне подання ===");

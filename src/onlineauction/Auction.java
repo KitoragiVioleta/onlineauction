@@ -2,7 +2,9 @@ package onlineauction;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
+/** Керує життєвим циклом аукціону та правилами приймання ставок. */
 public final class Auction {
     private final String auctionId;
     private final Lot lot;
@@ -17,10 +19,10 @@ public final class Auction {
 
     public Auction(String auctionId, Lot lot, LocalDateTime startTime, LocalDateTime endTime,
                    BigDecimal minimumIncrement, IAcquiringService acquiringService) {
-        this.auctionId = AuctionParticipant.requireText(auctionId, "Ідентифікатор аукціону");
-        this.lot = AuctionParticipant.requireNonNull(lot, "Лот");
-        this.startTime = AuctionParticipant.requireNonNull(startTime, "Час початку");
-        this.endTime = AuctionParticipant.requireNonNull(endTime, "Час завершення");
+        this.auctionId = requireText(auctionId, "Ідентифікатор аукціону");
+        this.lot = Objects.requireNonNull(lot, "Лот не може бути null");
+        this.startTime = Objects.requireNonNull(startTime, "Час початку не може бути null");
+        this.endTime = Objects.requireNonNull(endTime, "Час завершення не може бути null");
         if (!startTime.isBefore(endTime)) {
             throw new IllegalArgumentException("Час початку має бути раніше часу завершення");
         }
@@ -28,7 +30,7 @@ public final class Auction {
             throw new IllegalArgumentException("Мінімальний крок не може бути від'ємним");
         }
         this.minimumIncrement = minimumIncrement;
-        this.acquiringService = AuctionParticipant.requireNonNull(acquiringService, "Сервіс еквайрингу");
+        this.acquiringService = Objects.requireNonNull(acquiringService, "Сервіс еквайрингу не може бути null");
     }
 
     public String getAuctionId() {
@@ -56,6 +58,7 @@ public final class Auction {
     }
 
     public void submitForModeration() {
+        // Переводить чернетку або відхилений аукціон на повторну модерацію.
         if (status != AuctionStatus.DRAFT && status != AuctionStatus.REJECTED) {
             rejectOperation("Подання на модерацію", "поточний стан не дозволяє подання");
             return;
@@ -66,6 +69,7 @@ public final class Auction {
     }
 
     public void approve() {
+        // Одразу відкриває торги після схвалення модератора.
         if (status != AuctionStatus.ON_MODERATION) {
             rejectOperation("Схвалення", "поточний стан не На модерації");
             return;
@@ -75,11 +79,12 @@ public final class Auction {
     }
 
     public void reject(String reason) {
+        // Фіксує причину відхилення та переводить аукціон у кінцевий для модерації стан.
         if (status != AuctionStatus.ON_MODERATION) {
             rejectOperation("Відхилення", "поточний стан не На модерації");
             return;
         }
-        rejectionReason = AuctionParticipant.requireText(reason, "Причина відхилення");
+        rejectionReason = requireText(reason, "Причина відхилення");
         status = AuctionStatus.REJECTED;
         System.out.printf("Відхилення: На модерації -> %s; причина: %s%n",
                 status.getLabel(), rejectionReason);
@@ -101,6 +106,7 @@ public final class Auction {
     }
 
     public boolean placeBid(Bidder bidder, BigDecimal amount, LocalDateTime submittedAt) {
+        // Перевіряє ставку в порядку стан, час, сума та додає лише прийняті ставки.
         if (bidder == null) {
             rejectOperation("Подання ставки", "учасник ставки не визначений");
             return false;
@@ -128,6 +134,7 @@ public final class Auction {
     }
 
     public void close() {
+        // Завершує активні торги, визначає переможця та запускає симульовану оплату.
         if (status != AuctionStatus.ACTIVE) {
             rejectOperation("Завершення", "поточний стан не Активні торги");
             return;
@@ -151,6 +158,7 @@ public final class Auction {
     }
 
     public Bidder determineWinner() {
+        // Повертає учасника найвищої ставки з правилом однакових сум Lot.
         Bid highestBid = lot.getHighestBid();
         return highestBid == null ? null : highestBid.getBidder();
     }
@@ -161,5 +169,12 @@ public final class Auction {
                 : "";
         System.out.printf("Операцію відхилено: %s; стан: %s; причина: %s%s%n",
                 operation, status.getLabel(), reason, bidCount);
+    }
+
+    private static String requireText(String value, String field) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(field + " не може бути порожнім");
+        }
+        return value;
     }
 }

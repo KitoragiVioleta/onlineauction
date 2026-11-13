@@ -2,6 +2,7 @@ package onlineauction;
 
 import java.util.Objects;
 
+/** Базова ідентичність ролі учасника аукціону. */
 public abstract class AuctionParticipant {
     private final String participantId;
     private final String displayName;
@@ -17,6 +18,7 @@ public abstract class AuctionParticipant {
 
     public abstract String getRole();
 
+    /** Повертає ім'я, яке показується в повідомленнях. */
     public final String getDisplayName() {
         return displayName;
     }

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/** Роль учасника торгів, який подає ставки та може стати переможцем. */
 public final class Bidder extends AuctionParticipant implements ITradingRules {
     private final List<Bid> submittedBids = new ArrayList<>();
 
@@ -24,6 +25,7 @@ public final class Bidder extends AuctionParticipant implements ITradingRules {
     }
 
     public boolean placeBid(Auction auction, BigDecimal amount, LocalDateTime submittedAt) {
+        // Делегує аукціону перевірку та приймання ставки від цього учасника.
         if (auction == null) {
             throw new IllegalArgumentException("Аукціон не може бути null");
         }
@@ -34,6 +36,7 @@ public final class Bidder extends AuctionParticipant implements ITradingRules {
     }
 
     void recordBid(Bid bid) {
+        // Зберігає прийняту ставку в історії учасника.
         submittedBids.add(bid);
     }
 

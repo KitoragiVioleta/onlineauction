@@ -3,10 +3,17 @@ class AuctionParticipant {
   <<abstract>>
   -String participantId
   -String displayName
-  +AuctionParticipant(String participantId, String displayName)
+  #AuctionParticipant(String participantId, String displayName)
   +String getParticipantId()
   +abstract String getRole()
   +final String getDisplayName()
+  #static String requireText(String value, String field)
+  #static T requireNonNull(T value, String field)
+}
+
+class Main {
+  -Main()
+  +static void main(String[] args)
 }
 
 class Seller {
@@ -14,6 +21,7 @@ class Seller {
   +Seller(String participantId, String displayName)
   +override String getRole()
   +override boolean canPerform(Lot lot)
+  -void requireOwnedAuction(Auction auction)
   +Lot createLot(String lotId, String description, BigDecimal startingPrice)
   +Auction createAuction(String auctionId, Lot lot, LocalDateTime startTime, LocalDateTime endTime, BigDecimal minimumIncrement, IAcquiringService acquiringService)
   +void submitForModeration(Auction auction)
@@ -26,6 +34,8 @@ class Bidder {
   +Bidder(String participantId, String displayName)
   +override String getRole()
   +override boolean canPerform(Lot lot)
+  +boolean placeBid(Auction auction, BigDecimal amount, LocalDateTime submittedAt)
+  ~void recordBid(Bid bid)
   +List~Bid~ getSubmittedBids()
 }
 
@@ -34,6 +44,7 @@ class Moderator {
   +Moderator(String participantId, String displayName)
   +override String getRole()
   +override boolean canPerform(Lot lot)
+  -void requireReviewableAuction(Auction auction)
   +void approve(Auction auction)
   +void reject(Auction auction)
   +void reject(Auction auction, String reason)
@@ -52,7 +63,7 @@ class IAcquiringService {
 class AuctionStatus {
   <<enumeration>>
   -String label
-  +AuctionStatus(String label)
+  -AuctionStatus(String label)
   +String getLabel()
   DRAFT
   ON_MODERATION
@@ -89,6 +100,8 @@ class Auction {
   +boolean placeBid(Bidder bidder, BigDecimal amount, LocalDateTime submittedAt)
   +void close()
   +Bidder determineWinner()
+  -void rejectOperation(String operation, String reason)
+  -static String requireText(String value, String field)
 }
 
 class Lot {
@@ -103,6 +116,8 @@ class Lot {
   +Bid addBid(BigDecimal amount, LocalDateTime submittedAt, Bidder bidder)
   +Bid getHighestBid()
   +List~Bid~ getBids()
+  -static String requireText(String value, String field)
+  -static BigDecimal requireNonNegative(BigDecimal value, String field)
 }
 
 class Bid {
@@ -113,17 +128,25 @@ class Bid {
   +BigDecimal getAmount()
   +LocalDateTime getSubmittedAt()
   +Bidder getBidder()
+  -static BigDecimal requireNonNegative(BigDecimal value, String field)
 }
 
 class AcquiringService {
   -String merchantId
   +AcquiringService(String merchantId)
   +void charge(Bidder bidder, BigDecimal amount)
+  -static String requireText(String value, String field)
 }
 
 AuctionParticipant <|-- Seller
 AuctionParticipant <|-- Bidder
 AuctionParticipant <|-- Moderator
+Main ..> AcquiringService : creates
+Main ..> Seller : creates
+Main ..> Moderator : creates
+Main ..> Bidder : creates
+Main ..> Lot : scenarios
+Main ..> Auction : scenarios
 Seller ..|> ITradingRules
 Bidder ..|> ITradingRules
 Moderator ..|> ITradingRules
@@ -131,6 +154,7 @@ AcquiringService ..|> IAcquiringService
 Auction "1" --> "1" Lot : manages
 Lot "1" *-- "0..*" Bid : contains
 Bidder "1" -- "0..*" Bid : submits
+Bidder ..> Auction : placeBid
 Auction --> "0..1" Bidder : winner
 Seller "1" --> "0..*" Lot : creates
 Moderator "1" --> "0..*" Auction : reviews
@@ -141,3 +165,4 @@ ITradingRules ..> Lot : canPerform
 IAcquiringService ..> Bidder : charge
 Lot ..> Bidder : addBid
 Auction --> AuctionStatus : status
+Auction ..> Bid : placeBid, close
