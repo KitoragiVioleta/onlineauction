@@ -1,5 +1,7 @@
 package onlineauction;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +21,16 @@ public final class Bidder extends AuctionParticipant implements ITradingRules {
     @Override
     public boolean canPerform(Lot lot) {
         return lot != null;
+    }
+
+    public boolean placeBid(Auction auction, BigDecimal amount, LocalDateTime submittedAt) {
+        if (auction == null) {
+            throw new IllegalArgumentException("Аукціон не може бути null");
+        }
+        if (!canPerform(auction.getLot())) {
+            return false;
+        }
+        return auction.placeBid(this, amount, submittedAt);
     }
 
     void recordBid(Bid bid) {

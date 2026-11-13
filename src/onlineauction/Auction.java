@@ -143,6 +143,10 @@ public final class Auction {
         status = AuctionStatus.FINISHED_WITH_WINNER;
         System.out.printf("Завершення з переможцем: %s, підсумкова ціна %s, статус %s%n",
                 winner.getDisplayName(), finalPrice, status.getLabel());
+        System.out.printf("Повідомлення продавцю: аукціон %s завершено; переможець %s; підсумкова ціна %s%n",
+                auctionId, winner.getDisplayName(), finalPrice);
+        System.out.printf("Повідомлення переможцю: %s, ви перемогли; підсумкова ціна %s%n",
+                winner.getDisplayName(), finalPrice);
         acquiringService.charge(winner, finalPrice);
     }
 

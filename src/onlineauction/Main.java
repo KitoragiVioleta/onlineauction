@@ -20,15 +20,17 @@ public final class Main {
         Lot lot = seller.createLot("lot-1", "Вінтажний годинник", new BigDecimal("100.00"));
         Auction auction = seller.createAuction("auction-1", lot, start, end,
                 new BigDecimal("10.00"), acquiringService);
+        System.out.printf("Перевірка ролей: продавець=%s, учасник торгів=%s, модератор=%s%n",
+                seller.canPerform(lot), firstBidder.canPerform(lot), moderator.canPerform(lot));
         seller.submitForModeration(auction);
         moderator.approve(auction);
-        auction.placeBid(firstBidder, new BigDecimal("100.00"), start);
-        auction.placeBid(secondBidder, new BigDecimal("110.00"), end);
-        auction.placeBid(secondBidder, new BigDecimal("115.00"), end.plusMinutes(1));
-        auction.placeBid(secondBidder, new BigDecimal("115.00"), start.plusMinutes(20));
-        auction.placeBid(firstBidder, new BigDecimal("120.00"), start.plusMinutes(20));
+        firstBidder.placeBid(auction, new BigDecimal("100.00"), start);
+        secondBidder.placeBid(auction, new BigDecimal("110.00"), end);
+        secondBidder.placeBid(auction, new BigDecimal("115.00"), end.plusMinutes(1));
+        secondBidder.placeBid(auction, new BigDecimal("115.00"), start.plusMinutes(20));
+        firstBidder.placeBid(auction, new BigDecimal("120.00"), start.plusMinutes(20));
         auction.close();
-        auction.placeBid(secondBidder, new BigDecimal("130.00"), end);
+        secondBidder.placeBid(auction, new BigDecimal("130.00"), end);
 
         System.out.println("=== Tie-break однакових сум ===");
         Lot tieLot = seller.createLot("lot-tie", "Лот для tie-break", new BigDecimal("1.00"));
@@ -36,8 +38,8 @@ public final class Main {
                 new BigDecimal("0.00"), acquiringService);
         seller.submitForModeration(tieAuction);
         moderator.approve(tieAuction);
-        tieAuction.placeBid(firstBidder, new BigDecimal("200.00"), start.plusMinutes(5));
-        tieAuction.placeBid(secondBidder, new BigDecimal("200.00"), start.plusMinutes(6));
+        firstBidder.placeBid(tieAuction, new BigDecimal("200.00"), start.plusMinutes(5));
+        secondBidder.placeBid(tieAuction, new BigDecimal("200.00"), start.plusMinutes(6));
         tieAuction.close();
         System.out.printf("Tie-break: переможець %s за ранішою ставкою%n",
                 tieAuction.getWinner().getDisplayName());

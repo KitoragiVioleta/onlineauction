@@ -22,6 +22,7 @@ public final class Moderator extends AuctionParticipant implements ITradingRules
     }
 
     public void approve(Auction auction) {
+        requireReviewableAuction(auction);
         reviewedAuctions.add(auction);
         auction.approve();
     }
@@ -31,11 +32,18 @@ public final class Moderator extends AuctionParticipant implements ITradingRules
     }
 
     public void reject(Auction auction, String reason) {
+        requireReviewableAuction(auction);
         reviewedAuctions.add(auction);
         auction.reject(reason);
     }
 
     public List<Auction> getReviewedAuctions() {
         return Collections.unmodifiableList(reviewedAuctions);
+    }
+
+    private void requireReviewableAuction(Auction auction) {
+        if (auction == null || !canPerform(auction.getLot())) {
+            throw new IllegalArgumentException("Модератор не може перевірити відсутній лот");
+        }
     }
 }

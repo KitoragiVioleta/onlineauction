@@ -20,7 +20,7 @@ public final class Seller extends AuctionParticipant implements ITradingRules {
 
     @Override
     public boolean canPerform(Lot lot) {
-        return lot != null;
+        return lot != null && lots.contains(lot);
     }
 
     public Lot createLot(String lotId, String description, BigDecimal startingPrice) {
@@ -41,14 +41,22 @@ public final class Seller extends AuctionParticipant implements ITradingRules {
     }
 
     public void submitForModeration(Auction auction) {
+        requireOwnedAuction(auction);
         auction.submitForModeration();
     }
 
     public void withdraw(Auction auction) {
+        requireOwnedAuction(auction);
         auction.withdraw();
     }
 
     public List<Lot> getLots() {
         return Collections.unmodifiableList(lots);
+    }
+
+    private void requireOwnedAuction(Auction auction) {
+        if (auction == null || !canPerform(auction.getLot())) {
+            throw new IllegalArgumentException("Продавець не може виконати операцію для чужого або відсутнього лоту");
+        }
     }
 }
