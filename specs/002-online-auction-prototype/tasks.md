@@ -37,12 +37,12 @@ implementation and validation of each story.
 
 - [ ] T004 [P] Створити `src/onlineauction/AuctionParticipant.java` з англійськими ідентифікаторами, ідентифікатором учасника та відображуваним ім'ям
 - [ ] T005 [P] Створити `src/onlineauction/AuctionStatus.java` із сімома станами та українськими відображуваними мітками
-- [ ] T006 [P] Створити `src/onlineauction/ITradingRules.java` з контрактом перевірки дозволу операції
+- [ ] T006 [P] Створити `src/onlineauction/ITradingRules.java` з контрактом `boolean canPerform(Lot lot)` для перевірки дозволу операції
 - [ ] T007 [P] Створити `src/onlineauction/IAcquiringService.java` з контрактом симульованої оплати
 - [ ] T008 Створити `src/onlineauction/Bid.java` як незмінну модель суми, `submittedAt` і учасника ставки
 - [ ] T009 Створити `src/onlineauction/Lot.java` з початковою ціною, прийнятими ставками та захистом колекції від зовнішньої мутації
 - [ ] T010 Створити `src/onlineauction/Auction.java` з полями життєвого циклу, явною залежністю `IAcquiringService` через конструктор і незворотними кінцевими станами
-- [ ] T011 [P] Створити `src/onlineauction/Seller.java`, `src/onlineauction/Bidder.java` і `src/onlineauction/Moderator.java` як ролі доменної моделі
+- [ ] T011 [P] Створити `src/onlineauction/Seller.java`, `src/onlineauction/Bidder.java` і `src/onlineauction/Moderator.java` як ролі доменної моделі, що реалізують `ITradingRules` і визначають `canPerform(Lot lot)` відповідно до своїх операцій
 - [ ] T012 [P] Створити `src/onlineauction/AcquiringService.java` з повідомленням замість реального фінансового списання
 
 ---
@@ -87,7 +87,7 @@ implementation and validation of each story.
 
 - [ ] T022 [P] [US2] Реалізувати відхилення аукціону з причиною в `src/onlineauction/Moderator.java` і переходом `ON_MODERATION -> REJECTED` у `src/onlineauction/Auction.java`
 - [ ] T023 [US2] Реалізувати повторне подання відхиленого лоту в `src/onlineauction/Seller.java` з переходом `REJECTED -> ON_MODERATION`
-- [ ] T024 [US2] Реалізувати повідомлення про відмову в `src/onlineauction/Auction.java` і `src/onlineauction/Moderator.java`, яке називає операцію, поточний стан і першу причину відмови
+- [ ] T024 [US2] Реалізувати повідомлення про відмову в `src/onlineauction/Auction.java`, `src/onlineauction/Seller.java` і `src/onlineauction/Moderator.java`, яке для кожної відмови називає операцію, поточний стан і першу причину за матрицею в `specs/002-online-auction-prototype/contracts/console-demo.md`
 - [ ] T025 [US2] Додати сценарій відхилення та повторного подання в `src/onlineauction/Main.java` без зміни результатів основного сценарію
 
 **Checkpoint**: Історія P2 незалежно демонструє модерацію з відхиленням і
@@ -126,9 +126,9 @@ implementation and validation of each story.
 - [ ] T033 [P] Узгодити `docs/class.mmd` і `docs/crc.xlsx` з фактичними класами, полями, методами, відповідальностями та взаємодіями
 - [ ] T034 [P] Узгодити `docs/sequence.mmd` з викликами основного й альтернативних сценаріїв та повідомленнями про відмови
 - [ ] T035 [P] Узгодити `docs/state.mmd` із сімома станами, дозволеними переходами та незворотністю кінцевих станів
-- [ ] T036 Оновити `specs/002-online-auction-prototype/quickstart.md` командами PowerShell і bash та перевірками включних часових меж, порядку валідації і tie-break правил
+- [ ] T036 Оновити `specs/002-online-auction-prototype/quickstart.md` командами PowerShell і bash та перевірками включних часових меж, порядку валідації, tie-break правил, формату повідомлень про відмову і незмінності списку прийнятих ставок до та після недійсної ставки
 - [ ] T037 Перевірити компіляцію `javac --release 17`, запуск `java -cp build onlineauction.Main` і завершення з кодом 0 за `specs/002-online-auction-prototype/quickstart.md`
-- [ ] T038 Повторити запуск і звірити детермінований stdout із `specs/002-online-auction-prototype/contracts/console-demo.md`, включно з українськими повідомленнями про відмови
+- [ ] T038 Повторити запуск і звірити детермінований stdout із `specs/002-online-auction-prototype/contracts/console-demo.md`, включно з українськими повідомленнями про відмови, обов'язковими маркерами операції/стану/першої причини та незмінністю кількості й складу прийнятих ставок після кожної недійсної ставки
 
 ---
 
