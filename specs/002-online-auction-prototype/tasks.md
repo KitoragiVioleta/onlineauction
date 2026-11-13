@@ -21,7 +21,7 @@ implementation and validation of each story.
 **Purpose**: Підготувати мінімальну структуру standalone Java-проєкту без
 зовнішніх залежностей.
 
-- [ ] T001 Створити каталоги `src/onlineauction`, `docs` і `build` згідно зі структурою в `specs/002-online-auction-prototype/plan.md`
+- [ ] T001 Створити каталог `src/onlineauction` і перевірити структуру `docs` згідно з `specs/002-online-auction-prototype/plan.md`
 - [ ] T002 [P] Підготувати кореневий `README.md` з призначенням прототипу, межами симуляції та розділами команд Windows PowerShell і Linux/macOS bash
 - [ ] T003 [P] Перевірити наявні артефакти `docs/usecase.puml`, `docs/class.mmd`, `docs/sequence.mmd`, `docs/state.mmd` і `docs/crc.xlsx` як джерело синхронізації доменної моделі
 
