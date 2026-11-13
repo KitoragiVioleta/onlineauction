@@ -27,10 +27,10 @@ public final class Main {
         seller.submitForModeration(auction);
         moderator.approve(auction);
         firstBidder.placeBid(auction, new BigDecimal("100.00"), start);
-        secondBidder.placeBid(auction, new BigDecimal("110.00"), end);
+        secondBidder.placeBid(auction, new BigDecimal("110.00"), start.plusMinutes(10));
         secondBidder.placeBid(auction, new BigDecimal("115.00"), end.plusMinutes(1));
         secondBidder.placeBid(auction, new BigDecimal("115.00"), start.plusMinutes(20));
-        firstBidder.placeBid(auction, new BigDecimal("120.00"), start.plusMinutes(20));
+        firstBidder.placeBid(auction, new BigDecimal("120.00"), end);
         auction.close();
         secondBidder.placeBid(auction, new BigDecimal("130.00"), end);
 

@@ -11,11 +11,6 @@ class AuctionParticipant {
   #static T requireNonNull(T value, String field)
 }
 
-class Main {
-  -Main()
-  +static void main(String[] args)
-}
-
 class Seller {
   -List~Lot~ lots
   +Seller(String participantId, String displayName)
@@ -48,6 +43,7 @@ class Moderator {
   +void approve(Auction auction)
   +void reject(Auction auction)
   +void reject(Auction auction, String reason)
+  +List~Auction~ getReviewedAuctions()
 }
 
 class ITradingRules {
@@ -141,12 +137,6 @@ class AcquiringService {
 AuctionParticipant <|-- Seller
 AuctionParticipant <|-- Bidder
 AuctionParticipant <|-- Moderator
-Main ..> AcquiringService : creates
-Main ..> Seller : creates
-Main ..> Moderator : creates
-Main ..> Bidder : creates
-Main ..> Lot : scenarios
-Main ..> Auction : scenarios
 Seller ..|> ITradingRules
 Bidder ..|> ITradingRules
 Moderator ..|> ITradingRules
